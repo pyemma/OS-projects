@@ -1,0 +1,56 @@
+diff -r linux-3.0.51/arch/x86/include/asm/unistd_32.h 下载/linux-3.0.51/arch/x86/include/asm/unistd_32.h
+232d231
+< #define __NR_mycall             223
+只在 linux-3.0.51/arch/x86/include/asm 存在：unistd_32.h~
+只在 linux-3.0.51/arch/x86/include 存在：generated
+diff -r linux-3.0.51/arch/x86/kernel/syscall_table_32.S 下载/linux-3.0.51/arch/x86/kernel/syscall_table_32.S
+225c225
+< 	.long sys_mycall
+---
+> 	.long sys_ni_syscall
+只在 linux-3.0.51/arch/x86/kernel 存在：syscall_table_32.S~
+只在 linux-3.0.51/ 存在：.config
+只在 linux-3.0.51/ 存在：.config.old
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：cayman_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：evergreen_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：r100_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：r200_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：r300_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：r420_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：r600_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：rn50_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：rs600_reg_safe.h
+只在 linux-3.0.51/drivers/gpu/drm/radeon 存在：rv515_reg_safe.h
+只在 linux-3.0.51/include 存在：config
+只在 linux-3.0.51/include 存在：generated
+只在 linux-3.0.51/include/linux 存在：version.h
+diff -r linux-3.0.51/kernel/sys.c 下载/linux-3.0.51/kernel/sys.c
+1882,1887d1881
+< 
+< asmlinkage int sys_mycall(int number)
+< {
+< 	printk("hello, my new kernel, py~!");
+< 	return number;
+< }
+只在 linux-3.0.51/kernel 存在：sys.c~
+只在 linux-3.0.51/ 存在：Module.symvers
+只在 linux-3.0.51/scripts/basic 存在：fixdep
+只在 linux-3.0.51/scripts 存在：bin2c
+只在 linux-3.0.51/scripts 存在：conmakehash
+只在 linux-3.0.51/scripts/genksyms 存在：genksyms
+只在 linux-3.0.51/scripts/genksyms 存在：keywords.c
+只在 linux-3.0.51/scripts/genksyms 存在：lex.c
+只在 linux-3.0.51/scripts/genksyms 存在：parse.c
+只在 linux-3.0.51/scripts/genksyms 存在：parse.h
+只在 linux-3.0.51/scripts 存在：kallsyms
+只在 linux-3.0.51/scripts/kconfig 存在：conf
+只在 linux-3.0.51/scripts/kconfig 存在：lex.zconf.c
+只在 linux-3.0.51/scripts/kconfig 存在：zconf.hash.c
+只在 linux-3.0.51/scripts/kconfig 存在：zconf.tab.c
+只在 linux-3.0.51/scripts/mod 存在：elfconfig.h
+只在 linux-3.0.51/scripts/mod 存在：mk_elfconfig
+只在 linux-3.0.51/scripts/mod 存在：modpost
+只在 linux-3.0.51/scripts 存在：recordmcount
+只在 linux-3.0.51/scripts/selinux/genheaders 存在：genheaders
+只在 linux-3.0.51/scripts/selinux/mdp 存在：mdp
+只在 linux-3.0.51/ 存在：.version

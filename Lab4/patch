@@ -1,0 +1,6539 @@
+diff -Nur linux-3.6-O/arch/x86/syscalls/syscall_32.tbl linux-3.6/arch/x86/syscalls/syscall_32.tbl
+--- linux-3.6-O/arch/x86/syscalls/syscall_32.tbl	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/arch/x86/syscalls/syscall_32.tbl	2012-11-21 20:04:04.120312441 +0800
+@@ -356,3 +356,5 @@
+ 347	i386	process_vm_readv	sys_process_vm_readv		compat_sys_process_vm_readv
+ 348	i386	process_vm_writev	sys_process_vm_writev		compat_sys_process_vm_writev
+ 349	i386	kcmp			sys_kcmp
++350 i386    phide          sys_phide
++351	i386	pycall			sys_pycall
+diff -Nur linux-3.6-O/arch/x86/syscalls/syscall_32.tbl~ linux-3.6/arch/x86/syscalls/syscall_32.tbl~
+--- linux-3.6-O/arch/x86/syscalls/syscall_32.tbl~	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.6/arch/x86/syscalls/syscall_32.tbl~	2012-11-21 19:46:25.616357849 +0800
+@@ -0,0 +1,359 @@
++#
++# 32-bit system call numbers and entry vectors
++#
++# The format is:
++# <number> <abi> <name> <entry point> <compat entry point>
++#
++# The abi is always "i386" for this file.
++#
++0	i386	restart_syscall		sys_restart_syscall
++1	i386	exit			sys_exit
++2	i386	fork			ptregs_fork			stub32_fork
++3	i386	read			sys_read
++4	i386	write			sys_write
++5	i386	open			sys_open			compat_sys_open
++6	i386	close			sys_close
++7	i386	waitpid			sys_waitpid			sys32_waitpid
++8	i386	creat			sys_creat
++9	i386	link			sys_link
++10	i386	unlink			sys_unlink
++11	i386	execve			ptregs_execve			stub32_execve
++12	i386	chdir			sys_chdir
++13	i386	time			sys_time			compat_sys_time
++14	i386	mknod			sys_mknod
++15	i386	chmod			sys_chmod
++16	i386	lchown			sys_lchown16
++17	i386	break
++18	i386	oldstat			sys_stat
++19	i386	lseek			sys_lseek			sys32_lseek
++20	i386	getpid			sys_getpid
++21	i386	mount			sys_mount			compat_sys_mount
++22	i386	umount			sys_oldumount
++23	i386	setuid			sys_setuid16
++24	i386	getuid			sys_getuid16
++25	i386	stime			sys_stime			compat_sys_stime
++26	i386	ptrace			sys_ptrace			compat_sys_ptrace
++27	i386	alarm			sys_alarm
++28	i386	oldfstat		sys_fstat
++29	i386	pause			sys_pause
++30	i386	utime			sys_utime			compat_sys_utime
++31	i386	stty
++32	i386	gtty
++33	i386	access			sys_access
++34	i386	nice			sys_nice
++35	i386	ftime
++36	i386	sync			sys_sync
++37	i386	kill			sys_kill			sys32_kill
++38	i386	rename			sys_rename
++39	i386	mkdir			sys_mkdir
++40	i386	rmdir			sys_rmdir
++41	i386	dup			sys_dup
++42	i386	pipe			sys_pipe
++43	i386	times			sys_times			compat_sys_times
++44	i386	prof
++45	i386	brk			sys_brk
++46	i386	setgid			sys_setgid16
++47	i386	getgid			sys_getgid16
++48	i386	signal			sys_signal
++49	i386	geteuid			sys_geteuid16
++50	i386	getegid			sys_getegid16
++51	i386	acct			sys_acct
++52	i386	umount2			sys_umount
++53	i386	lock
++54	i386	ioctl			sys_ioctl			compat_sys_ioctl
++55	i386	fcntl			sys_fcntl			compat_sys_fcntl64
++56	i386	mpx
++57	i386	setpgid			sys_setpgid
++58	i386	ulimit
++59	i386	oldolduname		sys_olduname
++60	i386	umask			sys_umask
++61	i386	chroot			sys_chroot
++62	i386	ustat			sys_ustat			compat_sys_ustat
++63	i386	dup2			sys_dup2
++64	i386	getppid			sys_getppid
++65	i386	getpgrp			sys_getpgrp
++66	i386	setsid			sys_setsid
++67	i386	sigaction		sys_sigaction			sys32_sigaction
++68	i386	sgetmask		sys_sgetmask
++69	i386	ssetmask		sys_ssetmask
++70	i386	setreuid		sys_setreuid16
++71	i386	setregid		sys_setregid16
++72	i386	sigsuspend		sys_sigsuspend			sys32_sigsuspend
++73	i386	sigpending		sys_sigpending			compat_sys_sigpending
++74	i386	sethostname		sys_sethostname
++75	i386	setrlimit		sys_setrlimit			compat_sys_setrlimit
++76	i386	getrlimit		sys_old_getrlimit		compat_sys_old_getrlimit
++77	i386	getrusage		sys_getrusage			compat_sys_getrusage
++78	i386	gettimeofday		sys_gettimeofday		compat_sys_gettimeofday
++79	i386	settimeofday		sys_settimeofday		compat_sys_settimeofday
++80	i386	getgroups		sys_getgroups16
++81	i386	setgroups		sys_setgroups16
++82	i386	select			sys_old_select			compat_sys_old_select
++83	i386	symlink			sys_symlink
++84	i386	oldlstat		sys_lstat
++85	i386	readlink		sys_readlink
++86	i386	uselib			sys_uselib
++87	i386	swapon			sys_swapon
++88	i386	reboot			sys_reboot
++89	i386	readdir			sys_old_readdir			compat_sys_old_readdir
++90	i386	mmap			sys_old_mmap			sys32_mmap
++91	i386	munmap			sys_munmap
++92	i386	truncate		sys_truncate
++93	i386	ftruncate		sys_ftruncate
++94	i386	fchmod			sys_fchmod
++95	i386	fchown			sys_fchown16
++96	i386	getpriority		sys_getpriority
++97	i386	setpriority		sys_setpriority
++98	i386	profil
++99	i386	statfs			sys_statfs			compat_sys_statfs
++100	i386	fstatfs			sys_fstatfs			compat_sys_fstatfs
++101	i386	ioperm			sys_ioperm
++102	i386	socketcall		sys_socketcall			compat_sys_socketcall
++103	i386	syslog			sys_syslog
++104	i386	setitimer		sys_setitimer			compat_sys_setitimer
++105	i386	getitimer		sys_getitimer			compat_sys_getitimer
++106	i386	stat			sys_newstat			compat_sys_newstat
++107	i386	lstat			sys_newlstat			compat_sys_newlstat
++108	i386	fstat			sys_newfstat			compat_sys_newfstat
++109	i386	olduname		sys_uname
++110	i386	iopl			ptregs_iopl			stub32_iopl
++111	i386	vhangup			sys_vhangup
++112	i386	idle
++113	i386	vm86old			ptregs_vm86old			sys32_vm86_warning
++114	i386	wait4			sys_wait4			compat_sys_wait4
++115	i386	swapoff			sys_swapoff
++116	i386	sysinfo			sys_sysinfo			compat_sys_sysinfo
++117	i386	ipc			sys_ipc				sys32_ipc
++118	i386	fsync			sys_fsync
++119	i386	sigreturn		ptregs_sigreturn		stub32_sigreturn
++120	i386	clone			ptregs_clone			stub32_clone
++121	i386	setdomainname		sys_setdomainname
++122	i386	uname			sys_newuname
++123	i386	modify_ldt		sys_modify_ldt
++124	i386	adjtimex		sys_adjtimex			compat_sys_adjtimex
++125	i386	mprotect		sys_mprotect			sys32_mprotect
++126	i386	sigprocmask		sys_sigprocmask			compat_sys_sigprocmask
++127	i386	create_module
++128	i386	init_module		sys_init_module
++129	i386	delete_module		sys_delete_module
++130	i386	get_kernel_syms
++131	i386	quotactl		sys_quotactl			sys32_quotactl
++132	i386	getpgid			sys_getpgid
++133	i386	fchdir			sys_fchdir
++134	i386	bdflush			sys_bdflush
++135	i386	sysfs			sys_sysfs
++136	i386	personality		sys_personality
++137	i386	afs_syscall
++138	i386	setfsuid		sys_setfsuid16
++139	i386	setfsgid		sys_setfsgid16
++140	i386	_llseek			sys_llseek
++141	i386	getdents		sys_getdents			compat_sys_getdents
++142	i386	_newselect		sys_select			compat_sys_select
++143	i386	flock			sys_flock
++144	i386	msync			sys_msync
++145	i386	readv			sys_readv			compat_sys_readv
++146	i386	writev			sys_writev			compat_sys_writev
++147	i386	getsid			sys_getsid
++148	i386	fdatasync		sys_fdatasync
++149	i386	_sysctl			sys_sysctl			compat_sys_sysctl
++150	i386	mlock			sys_mlock
++151	i386	munlock			sys_munlock
++152	i386	mlockall		sys_mlockall
++153	i386	munlockall		sys_munlockall
++154	i386	sched_setparam		sys_sched_setparam
++155	i386	sched_getparam		sys_sched_getparam
++156	i386	sched_setscheduler	sys_sched_setscheduler
++157	i386	sched_getscheduler	sys_sched_getscheduler
++158	i386	sched_yield		sys_sched_yield
++159	i386	sched_get_priority_max	sys_sched_get_priority_max
++160	i386	sched_get_priority_min	sys_sched_get_priority_min
++161	i386	sched_rr_get_interval	sys_sched_rr_get_interval	sys32_sched_rr_get_interval
++162	i386	nanosleep		sys_nanosleep			compat_sys_nanosleep
++163	i386	mremap			sys_mremap
++164	i386	setresuid		sys_setresuid16
++165	i386	getresuid		sys_getresuid16
++166	i386	vm86			ptregs_vm86			sys32_vm86_warning
++167	i386	query_module
++168	i386	poll			sys_poll
++169	i386	nfsservctl
++170	i386	setresgid		sys_setresgid16
++171	i386	getresgid		sys_getresgid16
++172	i386	prctl			sys_prctl
++173	i386	rt_sigreturn		ptregs_rt_sigreturn		stub32_rt_sigreturn
++174	i386	rt_sigaction		sys_rt_sigaction		sys32_rt_sigaction
++175	i386	rt_sigprocmask		sys_rt_sigprocmask
++176	i386	rt_sigpending		sys_rt_sigpending		sys32_rt_sigpending
++177	i386	rt_sigtimedwait		sys_rt_sigtimedwait		compat_sys_rt_sigtimedwait
++178	i386	rt_sigqueueinfo		sys_rt_sigqueueinfo		sys32_rt_sigqueueinfo
++179	i386	rt_sigsuspend		sys_rt_sigsuspend
++180	i386	pread64			sys_pread64			sys32_pread
++181	i386	pwrite64		sys_pwrite64			sys32_pwrite
++182	i386	chown			sys_chown16
++183	i386	getcwd			sys_getcwd
++184	i386	capget			sys_capget
++185	i386	capset			sys_capset
++186	i386	sigaltstack		ptregs_sigaltstack		stub32_sigaltstack
++187	i386	sendfile		sys_sendfile			sys32_sendfile
++188	i386	getpmsg
++189	i386	putpmsg
++190	i386	vfork			ptregs_vfork			stub32_vfork
++191	i386	ugetrlimit		sys_getrlimit			compat_sys_getrlimit
++192	i386	mmap2			sys_mmap_pgoff
++193	i386	truncate64		sys_truncate64			sys32_truncate64
++194	i386	ftruncate64		sys_ftruncate64			sys32_ftruncate64
++195	i386	stat64			sys_stat64			sys32_stat64
++196	i386	lstat64			sys_lstat64			sys32_lstat64
++197	i386	fstat64			sys_fstat64			sys32_fstat64
++198	i386	lchown32		sys_lchown
++199	i386	getuid32		sys_getuid
++200	i386	getgid32		sys_getgid
++201	i386	geteuid32		sys_geteuid
++202	i386	getegid32		sys_getegid
++203	i386	setreuid32		sys_setreuid
++204	i386	setregid32		sys_setregid
++205	i386	getgroups32		sys_getgroups
++206	i386	setgroups32		sys_setgroups
++207	i386	fchown32		sys_fchown
++208	i386	setresuid32		sys_setresuid
++209	i386	getresuid32		sys_getresuid
++210	i386	setresgid32		sys_setresgid
++211	i386	getresgid32		sys_getresgid
++212	i386	chown32			sys_chown
++213	i386	setuid32		sys_setuid
++214	i386	setgid32		sys_setgid
++215	i386	setfsuid32		sys_setfsuid
++216	i386	setfsgid32		sys_setfsgid
++217	i386	pivot_root		sys_pivot_root
++218	i386	mincore			sys_mincore
++219	i386	madvise			sys_madvise
++220	i386	getdents64		sys_getdents64			compat_sys_getdents64
++221	i386	fcntl64			sys_fcntl64			compat_sys_fcntl64
++# 222 is unused
++# 223 is unused
++224	i386	gettid			sys_gettid
++225	i386	readahead		sys_readahead			sys32_readahead
++226	i386	setxattr		sys_setxattr
++227	i386	lsetxattr		sys_lsetxattr
++228	i386	fsetxattr		sys_fsetxattr
++229	i386	getxattr		sys_getxattr
++230	i386	lgetxattr		sys_lgetxattr
++231	i386	fgetxattr		sys_fgetxattr
++232	i386	listxattr		sys_listxattr
++233	i386	llistxattr		sys_llistxattr
++234	i386	flistxattr		sys_flistxattr
++235	i386	removexattr		sys_removexattr
++236	i386	lremovexattr		sys_lremovexattr
++237	i386	fremovexattr		sys_fremovexattr
++238	i386	tkill			sys_tkill
++239	i386	sendfile64		sys_sendfile64
++240	i386	futex			sys_futex			compat_sys_futex
++241	i386	sched_setaffinity	sys_sched_setaffinity		compat_sys_sched_setaffinity
++242	i386	sched_getaffinity	sys_sched_getaffinity		compat_sys_sched_getaffinity
++243	i386	set_thread_area		sys_set_thread_area
++244	i386	get_thread_area		sys_get_thread_area
++245	i386	io_setup		sys_io_setup			compat_sys_io_setup
++246	i386	io_destroy		sys_io_destroy
++247	i386	io_getevents		sys_io_getevents		compat_sys_io_getevents
++248	i386	io_submit		sys_io_submit			compat_sys_io_submit
++249	i386	io_cancel		sys_io_cancel
++250	i386	fadvise64		sys_fadvise64			sys32_fadvise64
++# 251 is available for reuse (was briefly sys_set_zone_reclaim)
++252	i386	exit_group		sys_exit_group
++253	i386	lookup_dcookie		sys_lookup_dcookie		sys32_lookup_dcookie
++254	i386	epoll_create		sys_epoll_create
++255	i386	epoll_ctl		sys_epoll_ctl
++256	i386	epoll_wait		sys_epoll_wait
++257	i386	remap_file_pages	sys_remap_file_pages
++258	i386	set_tid_address		sys_set_tid_address
++259	i386	timer_create		sys_timer_create		compat_sys_timer_create
++260	i386	timer_settime		sys_timer_settime		compat_sys_timer_settime
++261	i386	timer_gettime		sys_timer_gettime		compat_sys_timer_gettime
++262	i386	timer_getoverrun	sys_timer_getoverrun
++263	i386	timer_delete		sys_timer_delete
++264	i386	clock_settime		sys_clock_settime		compat_sys_clock_settime
++265	i386	clock_gettime		sys_clock_gettime		compat_sys_clock_gettime
++266	i386	clock_getres		sys_clock_getres		compat_sys_clock_getres
++267	i386	clock_nanosleep		sys_clock_nanosleep		compat_sys_clock_nanosleep
++268	i386	statfs64		sys_statfs64			compat_sys_statfs64
++269	i386	fstatfs64		sys_fstatfs64			compat_sys_fstatfs64
++270	i386	tgkill			sys_tgkill
++271	i386	utimes			sys_utimes			compat_sys_utimes
++272	i386	fadvise64_64		sys_fadvise64_64		sys32_fadvise64_64
++273	i386	vserver
++274	i386	mbind			sys_mbind
++275	i386	get_mempolicy		sys_get_mempolicy		compat_sys_get_mempolicy
++276	i386	set_mempolicy		sys_set_mempolicy
++277	i386	mq_open			sys_mq_open			compat_sys_mq_open
++278	i386	mq_unlink		sys_mq_unlink
++279	i386	mq_timedsend		sys_mq_timedsend		compat_sys_mq_timedsend
++280	i386	mq_timedreceive		sys_mq_timedreceive		compat_sys_mq_timedreceive
++281	i386	mq_notify		sys_mq_notify			compat_sys_mq_notify
++282	i386	mq_getsetattr		sys_mq_getsetattr		compat_sys_mq_getsetattr
++283	i386	kexec_load		sys_kexec_load			compat_sys_kexec_load
++284	i386	waitid			sys_waitid			compat_sys_waitid
++# 285 sys_setaltroot
++286	i386	add_key			sys_add_key
++287	i386	request_key		sys_request_key
++288	i386	keyctl			sys_keyctl
++289	i386	ioprio_set		sys_ioprio_set
++290	i386	ioprio_get		sys_ioprio_get
++291	i386	inotify_init		sys_inotify_init
++292	i386	inotify_add_watch	sys_inotify_add_watch
++293	i386	inotify_rm_watch	sys_inotify_rm_watch
++294	i386	migrate_pages		sys_migrate_pages
++295	i386	openat			sys_openat			compat_sys_openat
++296	i386	mkdirat			sys_mkdirat
++297	i386	mknodat			sys_mknodat
++298	i386	fchownat		sys_fchownat
++299	i386	futimesat		sys_futimesat			compat_sys_futimesat
++300	i386	fstatat64		sys_fstatat64			sys32_fstatat
++301	i386	unlinkat		sys_unlinkat
++302	i386	renameat		sys_renameat
++303	i386	linkat			sys_linkat
++304	i386	symlinkat		sys_symlinkat
++305	i386	readlinkat		sys_readlinkat
++306	i386	fchmodat		sys_fchmodat
++307	i386	faccessat		sys_faccessat
++308	i386	pselect6		sys_pselect6			compat_sys_pselect6
++309	i386	ppoll			sys_ppoll			compat_sys_ppoll
++310	i386	unshare			sys_unshare
++311	i386	set_robust_list		sys_set_robust_list		compat_sys_set_robust_list
++312	i386	get_robust_list		sys_get_robust_list		compat_sys_get_robust_list
++313	i386	splice			sys_splice
++314	i386	sync_file_range		sys_sync_file_range		sys32_sync_file_range
++315	i386	tee			sys_tee
++316	i386	vmsplice		sys_vmsplice			compat_sys_vmsplice
++317	i386	move_pages		sys_move_pages			compat_sys_move_pages
++318	i386	getcpu			sys_getcpu
++319	i386	epoll_pwait		sys_epoll_pwait
++320	i386	utimensat		sys_utimensat			compat_sys_utimensat
++321	i386	signalfd		sys_signalfd			compat_sys_signalfd
++322	i386	timerfd_create		sys_timerfd_create
++323	i386	eventfd			sys_eventfd
++324	i386	fallocate		sys_fallocate			sys32_fallocate
++325	i386	timerfd_settime		sys_timerfd_settime		compat_sys_timerfd_settime
++326	i386	timerfd_gettime		sys_timerfd_gettime		compat_sys_timerfd_gettime
++327	i386	signalfd4		sys_signalfd4			compat_sys_signalfd4
++328	i386	eventfd2		sys_eventfd2
++329	i386	epoll_create1		sys_epoll_create1
++330	i386	dup3			sys_dup3
++331	i386	pipe2			sys_pipe2
++332	i386	inotify_init1		sys_inotify_init1
++333	i386	preadv			sys_preadv			compat_sys_preadv
++334	i386	pwritev			sys_pwritev			compat_sys_pwritev
++335	i386	rt_tgsigqueueinfo	sys_rt_tgsigqueueinfo		compat_sys_rt_tgsigqueueinfo
++336	i386	perf_event_open		sys_perf_event_open
++337	i386	recvmmsg		sys_recvmmsg			compat_sys_recvmmsg
++338	i386	fanotify_init		sys_fanotify_init
++339	i386	fanotify_mark		sys_fanotify_mark		sys32_fanotify_mark
++340	i386	prlimit64		sys_prlimit64
++341	i386	name_to_handle_at	sys_name_to_handle_at
++342	i386	open_by_handle_at	sys_open_by_handle_at		compat_sys_open_by_handle_at
++343	i386	clock_adjtime		sys_clock_adjtime		compat_sys_clock_adjtime
++344	i386	syncfs			sys_syncfs
++345	i386	sendmmsg		sys_sendmmsg			compat_sys_sendmmsg
++346	i386	setns			sys_setns
++347	i386	process_vm_readv	sys_process_vm_readv		compat_sys_process_vm_readv
++348	i386	process_vm_writev	sys_process_vm_writev		compat_sys_process_vm_writev
++349	i386	kcmp			sys_kcmp
++350 i386    phide          sys_phide
+diff -Nur linux-3.6-O/fs/proc/base.c linux-3.6/fs/proc/base.c
+--- linux-3.6-O/fs/proc/base.c	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/fs/proc/base.c	2012-11-21 19:48:16.876353076 +0800
+@@ -3251,6 +3251,7 @@
+ 	return error;
+ }
+ 
++extern void proc_flush_task(struct task_struct *task);
+ struct dentry *proc_pid_lookup(struct inode *dir, struct dentry * dentry, unsigned int flags)
+ {
+ 	struct dentry *result;
+@@ -3274,6 +3275,10 @@
+ 	rcu_read_unlock();
+ 	if (!task)
+ 		goto out;
++    if (task->cloak == 1){
++      proc_flush_task(task);
++      goto out;
++    }
+ 
+ 	result = proc_pid_instantiate(dir, dentry, task, NULL);
+ 	put_task_struct(task);
+@@ -3341,6 +3346,7 @@
+ 	return 0;
+ }
+ 
++extern void proc_flush_task(struct task_struct *task);
+ /* for the /proc/ directory itself, after non-process stuff has been done */
+ int proc_pid_readdir(struct file * filp, void * dirent, filldir_t filldir)
+ {
+@@ -3370,6 +3376,10 @@
+ 	for (iter = next_tgid(ns, iter);
+ 	     iter.task;
+ 	     iter.tgid += 1, iter = next_tgid(ns, iter)) {
++        if( (iter.task)->cloak == 1){
++          proc_flush_task(iter.task);
++          continue;
++        }
+ 		if (has_pid_permissions(ns, iter.task, 2))
+ 			__filldir = filldir;
+ 		else
+@@ -3727,3 +3737,11 @@
+ 	.readdir	= proc_task_readdir,
+ 	.llseek		= default_llseek,
+ };
++/*  
++SYSCALL_DEFINE2(phide,pid_t,pid,int,on)
++{
++  printk("phide\n");
++  pid_task(pid,PID_TASK)->clock = on;
++  return 0;
++}
++*/
+diff -Nur linux-3.6-O/fs/proc/base.c~ linux-3.6/fs/proc/base.c~
+--- linux-3.6-O/fs/proc/base.c~	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.6/fs/proc/base.c~	2012-11-21 19:46:25.704357847 +0800
+@@ -0,0 +1,3747 @@
++/*
++ *  linux/fs/proc/base.c
++ *
++ *  Copyright (C) 1991, 1992 Linus Torvalds
++ *
++ *  proc base directory handling functions
++ *
++ *  1999, Al Viro. Rewritten. Now it covers the whole per-process part.
++ *  Instead of using magical inumbers to determine the kind of object
++ *  we allocate and fill in-core inodes upon lookup. They don't even
++ *  go into icache. We cache the reference to task_struct upon lookup too.
++ *  Eventually it should become a filesystem in its own. We don't use the
++ *  rest of procfs anymore.
++ *
++ *
++ *  Changelog:
++ *  17-Jan-2005
++ *  Allan Bezerra
++ *  Bruna Moreira <bruna.moreira@indt.org.br>
++ *  Edjard Mota <edjard.mota@indt.org.br>
++ *  Ilias Biris <ilias.biris@indt.org.br>
++ *  Mauricio Lin <mauricio.lin@indt.org.br>
++ *
++ *  Embedded Linux Lab - 10LE Instituto Nokia de Tecnologia - INdT
++ *
++ *  A new process specific entry (smaps) included in /proc. It shows the
++ *  size of rss for each memory area. The maps entry lacks information
++ *  about physical memory size (rss) for each mapped file, i.e.,
++ *  rss information for executables and library files.
++ *  This additional information is useful for any tools that need to know
++ *  about physical memory consumption for a process specific library.
++ *
++ *  Changelog:
++ *  21-Feb-2005
++ *  Embedded Linux Lab - 10LE Instituto Nokia de Tecnologia - INdT
++ *  Pud inclusion in the page table walking.
++ *
++ *  ChangeLog:
++ *  10-Mar-2005
++ *  10LE Instituto Nokia de Tecnologia - INdT:
++ *  A better way to walks through the page table as suggested by Hugh Dickins.
++ *
++ *  Simo Piiroinen <simo.piiroinen@nokia.com>:
++ *  Smaps information related to shared, private, clean and dirty pages.
++ *
++ *  Paul Mundt <paul.mundt@nokia.com>:
++ *  Overall revision about smaps.
++ */
++
++#include <asm/uaccess.h>
++
++#include <linux/errno.h>
++#include <linux/time.h>
++#include <linux/proc_fs.h>
++#include <linux/stat.h>
++#include <linux/task_io_accounting_ops.h>
++#include <linux/init.h>
++#include <linux/capability.h>
++#include <linux/file.h>
++#include <linux/fdtable.h>
++#include <linux/string.h>
++#include <linux/seq_file.h>
++#include <linux/namei.h>
++#include <linux/mnt_namespace.h>
++#include <linux/mm.h>
++#include <linux/swap.h>
++#include <linux/rcupdate.h>
++#include <linux/kallsyms.h>
++#include <linux/stacktrace.h>
++#include <linux/resource.h>
++#include <linux/module.h>
++#include <linux/mount.h>
++#include <linux/security.h>
++#include <linux/ptrace.h>
++#include <linux/tracehook.h>
++#include <linux/cgroup.h>
++#include <linux/cpuset.h>
++#include <linux/audit.h>
++#include <linux/poll.h>
++#include <linux/nsproxy.h>
++#include <linux/oom.h>
++#include <linux/elf.h>
++#include <linux/pid_namespace.h>
++#include <linux/user_namespace.h>
++#include <linux/fs_struct.h>
++#include <linux/slab.h>
++#include <linux/flex_array.h>
++#ifdef CONFIG_HARDWALL
++#include <asm/hardwall.h>
++#endif
++#include <trace/events/oom.h>
++#include "internal.h"
++
++/* NOTE:
++ *	Implementing inode permission operations in /proc is almost
++ *	certainly an error.  Permission checks need to happen during
++ *	each system call not at open time.  The reason is that most of
++ *	what we wish to check for permissions in /proc varies at runtime.
++ *
++ *	The classic example of a problem is opening file descriptors
++ *	in /proc for a task before it execs a suid executable.
++ */
++
++struct pid_entry {
++	char *name;
++	int len;
++	umode_t mode;
++	const struct inode_operations *iop;
++	const struct file_operations *fop;
++	union proc_op op;
++};
++
++#define NOD(NAME, MODE, IOP, FOP, OP) {			\
++	.name = (NAME),					\
++	.len  = sizeof(NAME) - 1,			\
++	.mode = MODE,					\
++	.iop  = IOP,					\
++	.fop  = FOP,					\
++	.op   = OP,					\
++}
++
++#define DIR(NAME, MODE, iops, fops)	\
++	NOD(NAME, (S_IFDIR|(MODE)), &iops, &fops, {} )
++#define LNK(NAME, get_link)					\
++	NOD(NAME, (S_IFLNK|S_IRWXUGO),				\
++		&proc_pid_link_inode_operations, NULL,		\
++		{ .proc_get_link = get_link } )
++#define REG(NAME, MODE, fops)				\
++	NOD(NAME, (S_IFREG|(MODE)), NULL, &fops, {})
++#define INF(NAME, MODE, read)				\
++	NOD(NAME, (S_IFREG|(MODE)), 			\
++		NULL, &proc_info_file_operations,	\
++		{ .proc_read = read } )
++#define ONE(NAME, MODE, show)				\
++	NOD(NAME, (S_IFREG|(MODE)), 			\
++		NULL, &proc_single_file_operations,	\
++		{ .proc_show = show } )
++
++static int proc_fd_permission(struct inode *inode, int mask);
++
++/*
++ * Count the number of hardlinks for the pid_entry table, excluding the .
++ * and .. links.
++ */
++static unsigned int pid_entry_count_dirs(const struct pid_entry *entries,
++	unsigned int n)
++{
++	unsigned int i;
++	unsigned int count;
++
++	count = 0;
++	for (i = 0; i < n; ++i) {
++		if (S_ISDIR(entries[i].mode))
++			++count;
++	}
++
++	return count;
++}
++
++static int get_task_root(struct task_struct *task, struct path *root)
++{
++	int result = -ENOENT;
++
++	task_lock(task);
++	if (task->fs) {
++		get_fs_root(task->fs, root);
++		result = 0;
++	}
++	task_unlock(task);
++	return result;
++}
++
++static int proc_cwd_link(struct dentry *dentry, struct path *path)
++{
++	struct task_struct *task = get_proc_task(dentry->d_inode);
++	int result = -ENOENT;
++
++	if (task) {
++		task_lock(task);
++		if (task->fs) {
++			get_fs_pwd(task->fs, path);
++			result = 0;
++		}
++		task_unlock(task);
++		put_task_struct(task);
++	}
++	return result;
++}
++
++static int proc_root_link(struct dentry *dentry, struct path *path)
++{
++	struct task_struct *task = get_proc_task(dentry->d_inode);
++	int result = -ENOENT;
++
++	if (task) {
++		result = get_task_root(task, path);
++		put_task_struct(task);
++	}
++	return result;
++}
++
++static int proc_pid_cmdline(struct task_struct *task, char * buffer)
++{
++	int res = 0;
++	unsigned int len;
++	struct mm_struct *mm = get_task_mm(task);
++	if (!mm)
++		goto out;
++	if (!mm->arg_end)
++		goto out_mm;	/* Shh! No looking before we're done */
++
++ 	len = mm->arg_end - mm->arg_start;
++ 
++	if (len > PAGE_SIZE)
++		len = PAGE_SIZE;
++ 
++	res = access_process_vm(task, mm->arg_start, buffer, len, 0);
++
++	// If the nul at the end of args has been overwritten, then
++	// assume application is using setproctitle(3).
++	if (res > 0 && buffer[res-1] != '\0' && len < PAGE_SIZE) {
++		len = strnlen(buffer, res);
++		if (len < res) {
++		    res = len;
++		} else {
++			len = mm->env_end - mm->env_start;
++			if (len > PAGE_SIZE - res)
++				len = PAGE_SIZE - res;
++			res += access_process_vm(task, mm->env_start, buffer+res, len, 0);
++			res = strnlen(buffer, res);
++		}
++	}
++out_mm:
++	mmput(mm);
++out:
++	return res;
++}
++
++static int proc_pid_auxv(struct task_struct *task, char *buffer)
++{
++	struct mm_struct *mm = mm_access(task, PTRACE_MODE_READ);
++	int res = PTR_ERR(mm);
++	if (mm && !IS_ERR(mm)) {
++		unsigned int nwords = 0;
++		do {
++			nwords += 2;
++		} while (mm->saved_auxv[nwords - 2] != 0); /* AT_NULL */
++		res = nwords * sizeof(mm->saved_auxv[0]);
++		if (res > PAGE_SIZE)
++			res = PAGE_SIZE;
++		memcpy(buffer, mm->saved_auxv, res);
++		mmput(mm);
++	}
++	return res;
++}
++
++
++#ifdef CONFIG_KALLSYMS
++/*
++ * Provides a wchan file via kallsyms in a proper one-value-per-file format.
++ * Returns the resolved symbol.  If that fails, simply return the address.
++ */
++static int proc_pid_wchan(struct task_struct *task, char *buffer)
++{
++	unsigned long wchan;
++	char symname[KSYM_NAME_LEN];
++
++	wchan = get_wchan(task);
++
++	if (lookup_symbol_name(wchan, symname) < 0)
++		if (!ptrace_may_access(task, PTRACE_MODE_READ))
++			return 0;
++		else
++			return sprintf(buffer, "%lu", wchan);
++	else
++		return sprintf(buffer, "%s", symname);
++}
++#endif /* CONFIG_KALLSYMS */
++
++static int lock_trace(struct task_struct *task)
++{
++	int err = mutex_lock_killable(&task->signal->cred_guard_mutex);
++	if (err)
++		return err;
++	if (!ptrace_may_access(task, PTRACE_MODE_ATTACH)) {
++		mutex_unlock(&task->signal->cred_guard_mutex);
++		return -EPERM;
++	}
++	return 0;
++}
++
++static void unlock_trace(struct task_struct *task)
++{
++	mutex_unlock(&task->signal->cred_guard_mutex);
++}
++
++#ifdef CONFIG_STACKTRACE
++
++#define MAX_STACK_TRACE_DEPTH	64
++
++static int proc_pid_stack(struct seq_file *m, struct pid_namespace *ns,
++			  struct pid *pid, struct task_struct *task)
++{
++	struct stack_trace trace;
++	unsigned long *entries;
++	int err;
++	int i;
++
++	entries = kmalloc(MAX_STACK_TRACE_DEPTH * sizeof(*entries), GFP_KERNEL);
++	if (!entries)
++		return -ENOMEM;
++
++	trace.nr_entries	= 0;
++	trace.max_entries	= MAX_STACK_TRACE_DEPTH;
++	trace.entries		= entries;
++	trace.skip		= 0;
++
++	err = lock_trace(task);
++	if (!err) {
++		save_stack_trace_tsk(task, &trace);
++
++		for (i = 0; i < trace.nr_entries; i++) {
++			seq_printf(m, "[<%pK>] %pS\n",
++				   (void *)entries[i], (void *)entries[i]);
++		}
++		unlock_trace(task);
++	}
++	kfree(entries);
++
++	return err;
++}
++#endif
++
++#ifdef CONFIG_SCHEDSTATS
++/*
++ * Provides /proc/PID/schedstat
++ */
++static int proc_pid_schedstat(struct task_struct *task, char *buffer)
++{
++	return sprintf(buffer, "%llu %llu %lu\n",
++			(unsigned long long)task->se.sum_exec_runtime,
++			(unsigned long long)task->sched_info.run_delay,
++			task->sched_info.pcount);
++}
++#endif
++
++#ifdef CONFIG_LATENCYTOP
++static int lstats_show_proc(struct seq_file *m, void *v)
++{
++	int i;
++	struct inode *inode = m->private;
++	struct task_struct *task = get_proc_task(inode);
++
++	if (!task)
++		return -ESRCH;
++	seq_puts(m, "Latency Top version : v0.1\n");
++	for (i = 0; i < 32; i++) {
++		struct latency_record *lr = &task->latency_record[i];
++		if (lr->backtrace[0]) {
++			int q;
++			seq_printf(m, "%i %li %li",
++				   lr->count, lr->time, lr->max);
++			for (q = 0; q < LT_BACKTRACEDEPTH; q++) {
++				unsigned long bt = lr->backtrace[q];
++				if (!bt)
++					break;
++				if (bt == ULONG_MAX)
++					break;
++				seq_printf(m, " %ps", (void *)bt);
++			}
++			seq_putc(m, '\n');
++		}
++
++	}
++	put_task_struct(task);
++	return 0;
++}
++
++static int lstats_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, lstats_show_proc, inode);
++}
++
++static ssize_t lstats_write(struct file *file, const char __user *buf,
++			    size_t count, loff_t *offs)
++{
++	struct task_struct *task = get_proc_task(file->f_dentry->d_inode);
++
++	if (!task)
++		return -ESRCH;
++	clear_all_latency_tracing(task);
++	put_task_struct(task);
++
++	return count;
++}
++
++static const struct file_operations proc_lstats_operations = {
++	.open		= lstats_open,
++	.read		= seq_read,
++	.write		= lstats_write,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++#endif
++
++static int proc_oom_score(struct task_struct *task, char *buffer)
++{
++	unsigned long totalpages = totalram_pages + total_swap_pages;
++	unsigned long points = 0;
++
++	read_lock(&tasklist_lock);
++	if (pid_alive(task))
++		points = oom_badness(task, NULL, NULL, totalpages) *
++						1000 / totalpages;
++	read_unlock(&tasklist_lock);
++	return sprintf(buffer, "%lu\n", points);
++}
++
++struct limit_names {
++	char *name;
++	char *unit;
++};
++
++static const struct limit_names lnames[RLIM_NLIMITS] = {
++	[RLIMIT_CPU] = {"Max cpu time", "seconds"},
++	[RLIMIT_FSIZE] = {"Max file size", "bytes"},
++	[RLIMIT_DATA] = {"Max data size", "bytes"},
++	[RLIMIT_STACK] = {"Max stack size", "bytes"},
++	[RLIMIT_CORE] = {"Max core file size", "bytes"},
++	[RLIMIT_RSS] = {"Max resident set", "bytes"},
++	[RLIMIT_NPROC] = {"Max processes", "processes"},
++	[RLIMIT_NOFILE] = {"Max open files", "files"},
++	[RLIMIT_MEMLOCK] = {"Max locked memory", "bytes"},
++	[RLIMIT_AS] = {"Max address space", "bytes"},
++	[RLIMIT_LOCKS] = {"Max file locks", "locks"},
++	[RLIMIT_SIGPENDING] = {"Max pending signals", "signals"},
++	[RLIMIT_MSGQUEUE] = {"Max msgqueue size", "bytes"},
++	[RLIMIT_NICE] = {"Max nice priority", NULL},
++	[RLIMIT_RTPRIO] = {"Max realtime priority", NULL},
++	[RLIMIT_RTTIME] = {"Max realtime timeout", "us"},
++};
++
++/* Display limits for a process */
++static int proc_pid_limits(struct task_struct *task, char *buffer)
++{
++	unsigned int i;
++	int count = 0;
++	unsigned long flags;
++	char *bufptr = buffer;
++
++	struct rlimit rlim[RLIM_NLIMITS];
++
++	if (!lock_task_sighand(task, &flags))
++		return 0;
++	memcpy(rlim, task->signal->rlim, sizeof(struct rlimit) * RLIM_NLIMITS);
++	unlock_task_sighand(task, &flags);
++
++	/*
++	 * print the file header
++	 */
++	count += sprintf(&bufptr[count], "%-25s %-20s %-20s %-10s\n",
++			"Limit", "Soft Limit", "Hard Limit", "Units");
++
++	for (i = 0; i < RLIM_NLIMITS; i++) {
++		if (rlim[i].rlim_cur == RLIM_INFINITY)
++			count += sprintf(&bufptr[count], "%-25s %-20s ",
++					 lnames[i].name, "unlimited");
++		else
++			count += sprintf(&bufptr[count], "%-25s %-20lu ",
++					 lnames[i].name, rlim[i].rlim_cur);
++
++		if (rlim[i].rlim_max == RLIM_INFINITY)
++			count += sprintf(&bufptr[count], "%-20s ", "unlimited");
++		else
++			count += sprintf(&bufptr[count], "%-20lu ",
++					 rlim[i].rlim_max);
++
++		if (lnames[i].unit)
++			count += sprintf(&bufptr[count], "%-10s\n",
++					 lnames[i].unit);
++		else
++			count += sprintf(&bufptr[count], "\n");
++	}
++
++	return count;
++}
++
++#ifdef CONFIG_HAVE_ARCH_TRACEHOOK
++static int proc_pid_syscall(struct task_struct *task, char *buffer)
++{
++	long nr;
++	unsigned long args[6], sp, pc;
++	int res = lock_trace(task);
++	if (res)
++		return res;
++
++	if (task_current_syscall(task, &nr, args, 6, &sp, &pc))
++		res = sprintf(buffer, "running\n");
++	else if (nr < 0)
++		res = sprintf(buffer, "%ld 0x%lx 0x%lx\n", nr, sp, pc);
++	else
++		res = sprintf(buffer,
++		       "%ld 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx\n",
++		       nr,
++		       args[0], args[1], args[2], args[3], args[4], args[5],
++		       sp, pc);
++	unlock_trace(task);
++	return res;
++}
++#endif /* CONFIG_HAVE_ARCH_TRACEHOOK */
++
++/************************************************************************/
++/*                       Here the fs part begins                        */
++/************************************************************************/
++
++/* permission checks */
++static int proc_fd_access_allowed(struct inode *inode)
++{
++	struct task_struct *task;
++	int allowed = 0;
++	/* Allow access to a task's file descriptors if it is us or we
++	 * may use ptrace attach to the process and find out that
++	 * information.
++	 */
++	task = get_proc_task(inode);
++	if (task) {
++		allowed = ptrace_may_access(task, PTRACE_MODE_READ);
++		put_task_struct(task);
++	}
++	return allowed;
++}
++
++int proc_setattr(struct dentry *dentry, struct iattr *attr)
++{
++	int error;
++	struct inode *inode = dentry->d_inode;
++
++	if (attr->ia_valid & ATTR_MODE)
++		return -EPERM;
++
++	error = inode_change_ok(inode, attr);
++	if (error)
++		return error;
++
++	if ((attr->ia_valid & ATTR_SIZE) &&
++	    attr->ia_size != i_size_read(inode)) {
++		error = vmtruncate(inode, attr->ia_size);
++		if (error)
++			return error;
++	}
++
++	setattr_copy(inode, attr);
++	mark_inode_dirty(inode);
++	return 0;
++}
++
++/*
++ * May current process learn task's sched/cmdline info (for hide_pid_min=1)
++ * or euid/egid (for hide_pid_min=2)?
++ */
++static bool has_pid_permissions(struct pid_namespace *pid,
++				 struct task_struct *task,
++				 int hide_pid_min)
++{
++	if (pid->hide_pid < hide_pid_min)
++		return true;
++	if (in_group_p(pid->pid_gid))
++		return true;
++	return ptrace_may_access(task, PTRACE_MODE_READ);
++}
++
++
++static int proc_pid_permission(struct inode *inode, int mask)
++{
++	struct pid_namespace *pid = inode->i_sb->s_fs_info;
++	struct task_struct *task;
++	bool has_perms;
++
++	task = get_proc_task(inode);
++	if (!task)
++		return -ESRCH;
++	has_perms = has_pid_permissions(pid, task, 1);
++	put_task_struct(task);
++
++	if (!has_perms) {
++		if (pid->hide_pid == 2) {
++			/*
++			 * Let's make getdents(), stat(), and open()
++			 * consistent with each other.  If a process
++			 * may not stat() a file, it shouldn't be seen
++			 * in procfs at all.
++			 */
++			return -ENOENT;
++		}
++
++		return -EPERM;
++	}
++	return generic_permission(inode, mask);
++}
++
++
++
++static const struct inode_operations proc_def_inode_operations = {
++	.setattr	= proc_setattr,
++};
++
++#define PROC_BLOCK_SIZE	(3*1024)		/* 4K page size but our output routines use some slack for overruns */
++
++static ssize_t proc_info_read(struct file * file, char __user * buf,
++			  size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	unsigned long page;
++	ssize_t length;
++	struct task_struct *task = get_proc_task(inode);
++
++	length = -ESRCH;
++	if (!task)
++		goto out_no_task;
++
++	if (count > PROC_BLOCK_SIZE)
++		count = PROC_BLOCK_SIZE;
++
++	length = -ENOMEM;
++	if (!(page = __get_free_page(GFP_TEMPORARY)))
++		goto out;
++
++	length = PROC_I(inode)->op.proc_read(task, (char*)page);
++
++	if (length >= 0)
++		length = simple_read_from_buffer(buf, count, ppos, (char *)page, length);
++	free_page(page);
++out:
++	put_task_struct(task);
++out_no_task:
++	return length;
++}
++
++static const struct file_operations proc_info_file_operations = {
++	.read		= proc_info_read,
++	.llseek		= generic_file_llseek,
++};
++
++static int proc_single_show(struct seq_file *m, void *v)
++{
++	struct inode *inode = m->private;
++	struct pid_namespace *ns;
++	struct pid *pid;
++	struct task_struct *task;
++	int ret;
++
++	ns = inode->i_sb->s_fs_info;
++	pid = proc_pid(inode);
++	task = get_pid_task(pid, PIDTYPE_PID);
++	if (!task)
++		return -ESRCH;
++
++	ret = PROC_I(inode)->op.proc_show(m, ns, pid, task);
++
++	put_task_struct(task);
++	return ret;
++}
++
++static int proc_single_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, proc_single_show, inode);
++}
++
++static const struct file_operations proc_single_file_operations = {
++	.open		= proc_single_open,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++static int __mem_open(struct inode *inode, struct file *file, unsigned int mode)
++{
++	struct task_struct *task = get_proc_task(file->f_path.dentry->d_inode);
++	struct mm_struct *mm;
++
++	if (!task)
++		return -ESRCH;
++
++	mm = mm_access(task, mode);
++	put_task_struct(task);
++
++	if (IS_ERR(mm))
++		return PTR_ERR(mm);
++
++	if (mm) {
++		/* ensure this mm_struct can't be freed */
++		atomic_inc(&mm->mm_count);
++		/* but do not pin its memory */
++		mmput(mm);
++	}
++
++	file->private_data = mm;
++
++	return 0;
++}
++
++static int mem_open(struct inode *inode, struct file *file)
++{
++	int ret = __mem_open(inode, file, PTRACE_MODE_ATTACH);
++
++	/* OK to pass negative loff_t, we can catch out-of-range */
++	file->f_mode |= FMODE_UNSIGNED_OFFSET;
++
++	return ret;
++}
++
++static ssize_t mem_rw(struct file *file, char __user *buf,
++			size_t count, loff_t *ppos, int write)
++{
++	struct mm_struct *mm = file->private_data;
++	unsigned long addr = *ppos;
++	ssize_t copied;
++	char *page;
++
++	if (!mm)
++		return 0;
++
++	page = (char *)__get_free_page(GFP_TEMPORARY);
++	if (!page)
++		return -ENOMEM;
++
++	copied = 0;
++	if (!atomic_inc_not_zero(&mm->mm_users))
++		goto free;
++
++	while (count > 0) {
++		int this_len = min_t(int, count, PAGE_SIZE);
++
++		if (write && copy_from_user(page, buf, this_len)) {
++			copied = -EFAULT;
++			break;
++		}
++
++		this_len = access_remote_vm(mm, addr, page, this_len, write);
++		if (!this_len) {
++			if (!copied)
++				copied = -EIO;
++			break;
++		}
++
++		if (!write && copy_to_user(buf, page, this_len)) {
++			copied = -EFAULT;
++			break;
++		}
++
++		buf += this_len;
++		addr += this_len;
++		copied += this_len;
++		count -= this_len;
++	}
++	*ppos = addr;
++
++	mmput(mm);
++free:
++	free_page((unsigned long) page);
++	return copied;
++}
++
++static ssize_t mem_read(struct file *file, char __user *buf,
++			size_t count, loff_t *ppos)
++{
++	return mem_rw(file, buf, count, ppos, 0);
++}
++
++static ssize_t mem_write(struct file *file, const char __user *buf,
++			 size_t count, loff_t *ppos)
++{
++	return mem_rw(file, (char __user*)buf, count, ppos, 1);
++}
++
++loff_t mem_lseek(struct file *file, loff_t offset, int orig)
++{
++	switch (orig) {
++	case 0:
++		file->f_pos = offset;
++		break;
++	case 1:
++		file->f_pos += offset;
++		break;
++	default:
++		return -EINVAL;
++	}
++	force_successful_syscall_return();
++	return file->f_pos;
++}
++
++static int mem_release(struct inode *inode, struct file *file)
++{
++	struct mm_struct *mm = file->private_data;
++	if (mm)
++		mmdrop(mm);
++	return 0;
++}
++
++static const struct file_operations proc_mem_operations = {
++	.llseek		= mem_lseek,
++	.read		= mem_read,
++	.write		= mem_write,
++	.open		= mem_open,
++	.release	= mem_release,
++};
++
++static int environ_open(struct inode *inode, struct file *file)
++{
++	return __mem_open(inode, file, PTRACE_MODE_READ);
++}
++
++static ssize_t environ_read(struct file *file, char __user *buf,
++			size_t count, loff_t *ppos)
++{
++	char *page;
++	unsigned long src = *ppos;
++	int ret = 0;
++	struct mm_struct *mm = file->private_data;
++
++	if (!mm)
++		return 0;
++
++	page = (char *)__get_free_page(GFP_TEMPORARY);
++	if (!page)
++		return -ENOMEM;
++
++	ret = 0;
++	if (!atomic_inc_not_zero(&mm->mm_users))
++		goto free;
++	while (count > 0) {
++		size_t this_len, max_len;
++		int retval;
++
++		if (src >= (mm->env_end - mm->env_start))
++			break;
++
++		this_len = mm->env_end - (mm->env_start + src);
++
++		max_len = min_t(size_t, PAGE_SIZE, count);
++		this_len = min(max_len, this_len);
++
++		retval = access_remote_vm(mm, (mm->env_start + src),
++			page, this_len, 0);
++
++		if (retval <= 0) {
++			ret = retval;
++			break;
++		}
++
++		if (copy_to_user(buf, page, retval)) {
++			ret = -EFAULT;
++			break;
++		}
++
++		ret += retval;
++		src += retval;
++		buf += retval;
++		count -= retval;
++	}
++	*ppos = src;
++	mmput(mm);
++
++free:
++	free_page((unsigned long) page);
++	return ret;
++}
++
++static const struct file_operations proc_environ_operations = {
++	.open		= environ_open,
++	.read		= environ_read,
++	.llseek		= generic_file_llseek,
++	.release	= mem_release,
++};
++
++static ssize_t oom_adjust_read(struct file *file, char __user *buf,
++				size_t count, loff_t *ppos)
++{
++	struct task_struct *task = get_proc_task(file->f_path.dentry->d_inode);
++	char buffer[PROC_NUMBUF];
++	size_t len;
++	int oom_adjust = OOM_DISABLE;
++	unsigned long flags;
++
++	if (!task)
++		return -ESRCH;
++
++	if (lock_task_sighand(task, &flags)) {
++		oom_adjust = task->signal->oom_adj;
++		unlock_task_sighand(task, &flags);
++	}
++
++	put_task_struct(task);
++
++	len = snprintf(buffer, sizeof(buffer), "%i\n", oom_adjust);
++
++	return simple_read_from_buffer(buf, count, ppos, buffer, len);
++}
++
++static ssize_t oom_adjust_write(struct file *file, const char __user *buf,
++				size_t count, loff_t *ppos)
++{
++	struct task_struct *task;
++	char buffer[PROC_NUMBUF];
++	int oom_adjust;
++	unsigned long flags;
++	int err;
++
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count)) {
++		err = -EFAULT;
++		goto out;
++	}
++
++	err = kstrtoint(strstrip(buffer), 0, &oom_adjust);
++	if (err)
++		goto out;
++	if ((oom_adjust < OOM_ADJUST_MIN || oom_adjust > OOM_ADJUST_MAX) &&
++	     oom_adjust != OOM_DISABLE) {
++		err = -EINVAL;
++		goto out;
++	}
++
++	task = get_proc_task(file->f_path.dentry->d_inode);
++	if (!task) {
++		err = -ESRCH;
++		goto out;
++	}
++
++	task_lock(task);
++	if (!task->mm) {
++		err = -EINVAL;
++		goto err_task_lock;
++	}
++
++	if (!lock_task_sighand(task, &flags)) {
++		err = -ESRCH;
++		goto err_task_lock;
++	}
++
++	if (oom_adjust < task->signal->oom_adj && !capable(CAP_SYS_RESOURCE)) {
++		err = -EACCES;
++		goto err_sighand;
++	}
++
++	/*
++	 * Warn that /proc/pid/oom_adj is deprecated, see
++	 * Documentation/feature-removal-schedule.txt.
++	 */
++	printk_once(KERN_WARNING "%s (%d): /proc/%d/oom_adj is deprecated, please use /proc/%d/oom_score_adj instead.\n",
++		  current->comm, task_pid_nr(current), task_pid_nr(task),
++		  task_pid_nr(task));
++	task->signal->oom_adj = oom_adjust;
++	/*
++	 * Scale /proc/pid/oom_score_adj appropriately ensuring that a maximum
++	 * value is always attainable.
++	 */
++	if (task->signal->oom_adj == OOM_ADJUST_MAX)
++		task->signal->oom_score_adj = OOM_SCORE_ADJ_MAX;
++	else
++		task->signal->oom_score_adj = (oom_adjust * OOM_SCORE_ADJ_MAX) /
++								-OOM_DISABLE;
++	trace_oom_score_adj_update(task);
++err_sighand:
++	unlock_task_sighand(task, &flags);
++err_task_lock:
++	task_unlock(task);
++	put_task_struct(task);
++out:
++	return err < 0 ? err : count;
++}
++
++static const struct file_operations proc_oom_adjust_operations = {
++	.read		= oom_adjust_read,
++	.write		= oom_adjust_write,
++	.llseek		= generic_file_llseek,
++};
++
++static ssize_t oom_score_adj_read(struct file *file, char __user *buf,
++					size_t count, loff_t *ppos)
++{
++	struct task_struct *task = get_proc_task(file->f_path.dentry->d_inode);
++	char buffer[PROC_NUMBUF];
++	int oom_score_adj = OOM_SCORE_ADJ_MIN;
++	unsigned long flags;
++	size_t len;
++
++	if (!task)
++		return -ESRCH;
++	if (lock_task_sighand(task, &flags)) {
++		oom_score_adj = task->signal->oom_score_adj;
++		unlock_task_sighand(task, &flags);
++	}
++	put_task_struct(task);
++	len = snprintf(buffer, sizeof(buffer), "%d\n", oom_score_adj);
++	return simple_read_from_buffer(buf, count, ppos, buffer, len);
++}
++
++static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
++					size_t count, loff_t *ppos)
++{
++	struct task_struct *task;
++	char buffer[PROC_NUMBUF];
++	unsigned long flags;
++	int oom_score_adj;
++	int err;
++
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count)) {
++		err = -EFAULT;
++		goto out;
++	}
++
++	err = kstrtoint(strstrip(buffer), 0, &oom_score_adj);
++	if (err)
++		goto out;
++	if (oom_score_adj < OOM_SCORE_ADJ_MIN ||
++			oom_score_adj > OOM_SCORE_ADJ_MAX) {
++		err = -EINVAL;
++		goto out;
++	}
++
++	task = get_proc_task(file->f_path.dentry->d_inode);
++	if (!task) {
++		err = -ESRCH;
++		goto out;
++	}
++
++	task_lock(task);
++	if (!task->mm) {
++		err = -EINVAL;
++		goto err_task_lock;
++	}
++
++	if (!lock_task_sighand(task, &flags)) {
++		err = -ESRCH;
++		goto err_task_lock;
++	}
++
++	if (oom_score_adj < task->signal->oom_score_adj_min &&
++			!capable(CAP_SYS_RESOURCE)) {
++		err = -EACCES;
++		goto err_sighand;
++	}
++
++	task->signal->oom_score_adj = oom_score_adj;
++	if (has_capability_noaudit(current, CAP_SYS_RESOURCE))
++		task->signal->oom_score_adj_min = oom_score_adj;
++	trace_oom_score_adj_update(task);
++	/*
++	 * Scale /proc/pid/oom_adj appropriately ensuring that OOM_DISABLE is
++	 * always attainable.
++	 */
++	if (task->signal->oom_score_adj == OOM_SCORE_ADJ_MIN)
++		task->signal->oom_adj = OOM_DISABLE;
++	else
++		task->signal->oom_adj = (oom_score_adj * OOM_ADJUST_MAX) /
++							OOM_SCORE_ADJ_MAX;
++err_sighand:
++	unlock_task_sighand(task, &flags);
++err_task_lock:
++	task_unlock(task);
++	put_task_struct(task);
++out:
++	return err < 0 ? err : count;
++}
++
++static const struct file_operations proc_oom_score_adj_operations = {
++	.read		= oom_score_adj_read,
++	.write		= oom_score_adj_write,
++	.llseek		= default_llseek,
++};
++
++#ifdef CONFIG_AUDITSYSCALL
++#define TMPBUFLEN 21
++static ssize_t proc_loginuid_read(struct file * file, char __user * buf,
++				  size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	struct task_struct *task = get_proc_task(inode);
++	ssize_t length;
++	char tmpbuf[TMPBUFLEN];
++
++	if (!task)
++		return -ESRCH;
++	length = scnprintf(tmpbuf, TMPBUFLEN, "%u",
++				audit_get_loginuid(task));
++	put_task_struct(task);
++	return simple_read_from_buffer(buf, count, ppos, tmpbuf, length);
++}
++
++static ssize_t proc_loginuid_write(struct file * file, const char __user * buf,
++				   size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	char *page, *tmp;
++	ssize_t length;
++	uid_t loginuid;
++
++	rcu_read_lock();
++	if (current != pid_task(proc_pid(inode), PIDTYPE_PID)) {
++		rcu_read_unlock();
++		return -EPERM;
++	}
++	rcu_read_unlock();
++
++	if (count >= PAGE_SIZE)
++		count = PAGE_SIZE - 1;
++
++	if (*ppos != 0) {
++		/* No partial writes. */
++		return -EINVAL;
++	}
++	page = (char*)__get_free_page(GFP_TEMPORARY);
++	if (!page)
++		return -ENOMEM;
++	length = -EFAULT;
++	if (copy_from_user(page, buf, count))
++		goto out_free_page;
++
++	page[count] = '\0';
++	loginuid = simple_strtoul(page, &tmp, 10);
++	if (tmp == page) {
++		length = -EINVAL;
++		goto out_free_page;
++
++	}
++	length = audit_set_loginuid(loginuid);
++	if (likely(length == 0))
++		length = count;
++
++out_free_page:
++	free_page((unsigned long) page);
++	return length;
++}
++
++static const struct file_operations proc_loginuid_operations = {
++	.read		= proc_loginuid_read,
++	.write		= proc_loginuid_write,
++	.llseek		= generic_file_llseek,
++};
++
++static ssize_t proc_sessionid_read(struct file * file, char __user * buf,
++				  size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	struct task_struct *task = get_proc_task(inode);
++	ssize_t length;
++	char tmpbuf[TMPBUFLEN];
++
++	if (!task)
++		return -ESRCH;
++	length = scnprintf(tmpbuf, TMPBUFLEN, "%u",
++				audit_get_sessionid(task));
++	put_task_struct(task);
++	return simple_read_from_buffer(buf, count, ppos, tmpbuf, length);
++}
++
++static const struct file_operations proc_sessionid_operations = {
++	.read		= proc_sessionid_read,
++	.llseek		= generic_file_llseek,
++};
++#endif
++
++#ifdef CONFIG_FAULT_INJECTION
++static ssize_t proc_fault_inject_read(struct file * file, char __user * buf,
++				      size_t count, loff_t *ppos)
++{
++	struct task_struct *task = get_proc_task(file->f_dentry->d_inode);
++	char buffer[PROC_NUMBUF];
++	size_t len;
++	int make_it_fail;
++
++	if (!task)
++		return -ESRCH;
++	make_it_fail = task->make_it_fail;
++	put_task_struct(task);
++
++	len = snprintf(buffer, sizeof(buffer), "%i\n", make_it_fail);
++
++	return simple_read_from_buffer(buf, count, ppos, buffer, len);
++}
++
++static ssize_t proc_fault_inject_write(struct file * file,
++			const char __user * buf, size_t count, loff_t *ppos)
++{
++	struct task_struct *task;
++	char buffer[PROC_NUMBUF], *end;
++	int make_it_fail;
++
++	if (!capable(CAP_SYS_RESOURCE))
++		return -EPERM;
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count))
++		return -EFAULT;
++	make_it_fail = simple_strtol(strstrip(buffer), &end, 0);
++	if (*end)
++		return -EINVAL;
++	task = get_proc_task(file->f_dentry->d_inode);
++	if (!task)
++		return -ESRCH;
++	task->make_it_fail = make_it_fail;
++	put_task_struct(task);
++
++	return count;
++}
++
++static const struct file_operations proc_fault_inject_operations = {
++	.read		= proc_fault_inject_read,
++	.write		= proc_fault_inject_write,
++	.llseek		= generic_file_llseek,
++};
++#endif
++
++
++#ifdef CONFIG_SCHED_DEBUG
++/*
++ * Print out various scheduling related per-task fields:
++ */
++static int sched_show(struct seq_file *m, void *v)
++{
++	struct inode *inode = m->private;
++	struct task_struct *p;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++	proc_sched_show_task(p, m);
++
++	put_task_struct(p);
++
++	return 0;
++}
++
++static ssize_t
++sched_write(struct file *file, const char __user *buf,
++	    size_t count, loff_t *offset)
++{
++	struct inode *inode = file->f_path.dentry->d_inode;
++	struct task_struct *p;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++	proc_sched_set_task(p);
++
++	put_task_struct(p);
++
++	return count;
++}
++
++static int sched_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, sched_show, inode);
++}
++
++static const struct file_operations proc_pid_sched_operations = {
++	.open		= sched_open,
++	.read		= seq_read,
++	.write		= sched_write,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++#endif
++
++#ifdef CONFIG_SCHED_AUTOGROUP
++/*
++ * Print out autogroup related information:
++ */
++static int sched_autogroup_show(struct seq_file *m, void *v)
++{
++	struct inode *inode = m->private;
++	struct task_struct *p;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++	proc_sched_autogroup_show_task(p, m);
++
++	put_task_struct(p);
++
++	return 0;
++}
++
++static ssize_t
++sched_autogroup_write(struct file *file, const char __user *buf,
++	    size_t count, loff_t *offset)
++{
++	struct inode *inode = file->f_path.dentry->d_inode;
++	struct task_struct *p;
++	char buffer[PROC_NUMBUF];
++	int nice;
++	int err;
++
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count))
++		return -EFAULT;
++
++	err = kstrtoint(strstrip(buffer), 0, &nice);
++	if (err < 0)
++		return err;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++
++	err = proc_sched_autogroup_set_nice(p, nice);
++	if (err)
++		count = err;
++
++	put_task_struct(p);
++
++	return count;
++}
++
++static int sched_autogroup_open(struct inode *inode, struct file *filp)
++{
++	int ret;
++
++	ret = single_open(filp, sched_autogroup_show, NULL);
++	if (!ret) {
++		struct seq_file *m = filp->private_data;
++
++		m->private = inode;
++	}
++	return ret;
++}
++
++static const struct file_operations proc_pid_sched_autogroup_operations = {
++	.open		= sched_autogroup_open,
++	.read		= seq_read,
++	.write		= sched_autogroup_write,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++#endif /* CONFIG_SCHED_AUTOGROUP */
++
++static ssize_t comm_write(struct file *file, const char __user *buf,
++				size_t count, loff_t *offset)
++{
++	struct inode *inode = file->f_path.dentry->d_inode;
++	struct task_struct *p;
++	char buffer[TASK_COMM_LEN];
++
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count))
++		return -EFAULT;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++
++	if (same_thread_group(current, p))
++		set_task_comm(p, buffer);
++	else
++		count = -EINVAL;
++
++	put_task_struct(p);
++
++	return count;
++}
++
++static int comm_show(struct seq_file *m, void *v)
++{
++	struct inode *inode = m->private;
++	struct task_struct *p;
++
++	p = get_proc_task(inode);
++	if (!p)
++		return -ESRCH;
++
++	task_lock(p);
++	seq_printf(m, "%s\n", p->comm);
++	task_unlock(p);
++
++	put_task_struct(p);
++
++	return 0;
++}
++
++static int comm_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, comm_show, inode);
++}
++
++static const struct file_operations proc_pid_set_comm_operations = {
++	.open		= comm_open,
++	.read		= seq_read,
++	.write		= comm_write,
++	.llseek		= seq_lseek,
++	.release	= single_release,
++};
++
++static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
++{
++	struct task_struct *task;
++	struct mm_struct *mm;
++	struct file *exe_file;
++
++	task = get_proc_task(dentry->d_inode);
++	if (!task)
++		return -ENOENT;
++	mm = get_task_mm(task);
++	put_task_struct(task);
++	if (!mm)
++		return -ENOENT;
++	exe_file = get_mm_exe_file(mm);
++	mmput(mm);
++	if (exe_file) {
++		*exe_path = exe_file->f_path;
++		path_get(&exe_file->f_path);
++		fput(exe_file);
++		return 0;
++	} else
++		return -ENOENT;
++}
++
++static void *proc_pid_follow_link(struct dentry *dentry, struct nameidata *nd)
++{
++	struct inode *inode = dentry->d_inode;
++	struct path path;
++	int error = -EACCES;
++
++	/* Are we allowed to snoop on the tasks file descriptors? */
++	if (!proc_fd_access_allowed(inode))
++		goto out;
++
++	error = PROC_I(inode)->op.proc_get_link(dentry, &path);
++	if (error)
++		goto out;
++
++	nd_jump_link(nd, &path);
++	return NULL;
++out:
++	return ERR_PTR(error);
++}
++
++static int do_proc_readlink(struct path *path, char __user *buffer, int buflen)
++{
++	char *tmp = (char*)__get_free_page(GFP_TEMPORARY);
++	char *pathname;
++	int len;
++
++	if (!tmp)
++		return -ENOMEM;
++
++	pathname = d_path(path, tmp, PAGE_SIZE);
++	len = PTR_ERR(pathname);
++	if (IS_ERR(pathname))
++		goto out;
++	len = tmp + PAGE_SIZE - 1 - pathname;
++
++	if (len > buflen)
++		len = buflen;
++	if (copy_to_user(buffer, pathname, len))
++		len = -EFAULT;
++ out:
++	free_page((unsigned long)tmp);
++	return len;
++}
++
++static int proc_pid_readlink(struct dentry * dentry, char __user * buffer, int buflen)
++{
++	int error = -EACCES;
++	struct inode *inode = dentry->d_inode;
++	struct path path;
++
++	/* Are we allowed to snoop on the tasks file descriptors? */
++	if (!proc_fd_access_allowed(inode))
++		goto out;
++
++	error = PROC_I(inode)->op.proc_get_link(dentry, &path);
++	if (error)
++		goto out;
++
++	error = do_proc_readlink(&path, buffer, buflen);
++	path_put(&path);
++out:
++	return error;
++}
++
++static const struct inode_operations proc_pid_link_inode_operations = {
++	.readlink	= proc_pid_readlink,
++	.follow_link	= proc_pid_follow_link,
++	.setattr	= proc_setattr,
++};
++
++
++/* building an inode */
++
++static int task_dumpable(struct task_struct *task)
++{
++	int dumpable = 0;
++	struct mm_struct *mm;
++
++	task_lock(task);
++	mm = task->mm;
++	if (mm)
++		dumpable = get_dumpable(mm);
++	task_unlock(task);
++	if(dumpable == 1)
++		return 1;
++	return 0;
++}
++
++struct inode *proc_pid_make_inode(struct super_block * sb, struct task_struct *task)
++{
++	struct inode * inode;
++	struct proc_inode *ei;
++	const struct cred *cred;
++
++	/* We need a new inode */
++
++	inode = new_inode(sb);
++	if (!inode)
++		goto out;
++
++	/* Common stuff */
++	ei = PROC_I(inode);
++	inode->i_ino = get_next_ino();
++	inode->i_mtime = inode->i_atime = inode->i_ctime = CURRENT_TIME;
++	inode->i_op = &proc_def_inode_operations;
++
++	/*
++	 * grab the reference to task.
++	 */
++	ei->pid = get_task_pid(task, PIDTYPE_PID);
++	if (!ei->pid)
++		goto out_unlock;
++
++	if (task_dumpable(task)) {
++		rcu_read_lock();
++		cred = __task_cred(task);
++		inode->i_uid = cred->euid;
++		inode->i_gid = cred->egid;
++		rcu_read_unlock();
++	}
++	security_task_to_inode(task, inode);
++
++out:
++	return inode;
++
++out_unlock:
++	iput(inode);
++	return NULL;
++}
++
++int pid_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat)
++{
++	struct inode *inode = dentry->d_inode;
++	struct task_struct *task;
++	const struct cred *cred;
++	struct pid_namespace *pid = dentry->d_sb->s_fs_info;
++
++	generic_fillattr(inode, stat);
++
++	rcu_read_lock();
++	stat->uid = GLOBAL_ROOT_UID;
++	stat->gid = GLOBAL_ROOT_GID;
++	task = pid_task(proc_pid(inode), PIDTYPE_PID);
++	if (task) {
++		if (!has_pid_permissions(pid, task, 2)) {
++			rcu_read_unlock();
++			/*
++			 * This doesn't prevent learning whether PID exists,
++			 * it only makes getattr() consistent with readdir().
++			 */
++			return -ENOENT;
++		}
++		if ((inode->i_mode == (S_IFDIR|S_IRUGO|S_IXUGO)) ||
++		    task_dumpable(task)) {
++			cred = __task_cred(task);
++			stat->uid = cred->euid;
++			stat->gid = cred->egid;
++		}
++	}
++	rcu_read_unlock();
++	return 0;
++}
++
++/* dentry stuff */
++
++/*
++ *	Exceptional case: normally we are not allowed to unhash a busy
++ * directory. In this case, however, we can do it - no aliasing problems
++ * due to the way we treat inodes.
++ *
++ * Rewrite the inode's ownerships here because the owning task may have
++ * performed a setuid(), etc.
++ *
++ * Before the /proc/pid/status file was created the only way to read
++ * the effective uid of a /process was to stat /proc/pid.  Reading
++ * /proc/pid/status is slow enough that procps and other packages
++ * kept stating /proc/pid.  To keep the rules in /proc simple I have
++ * made this apply to all per process world readable and executable
++ * directories.
++ */
++int pid_revalidate(struct dentry *dentry, unsigned int flags)
++{
++	struct inode *inode;
++	struct task_struct *task;
++	const struct cred *cred;
++
++	if (flags & LOOKUP_RCU)
++		return -ECHILD;
++
++	inode = dentry->d_inode;
++	task = get_proc_task(inode);
++
++	if (task) {
++		if ((inode->i_mode == (S_IFDIR|S_IRUGO|S_IXUGO)) ||
++		    task_dumpable(task)) {
++			rcu_read_lock();
++			cred = __task_cred(task);
++			inode->i_uid = cred->euid;
++			inode->i_gid = cred->egid;
++			rcu_read_unlock();
++		} else {
++			inode->i_uid = GLOBAL_ROOT_UID;
++			inode->i_gid = GLOBAL_ROOT_GID;
++		}
++		inode->i_mode &= ~(S_ISUID | S_ISGID);
++		security_task_to_inode(task, inode);
++		put_task_struct(task);
++		return 1;
++	}
++	d_drop(dentry);
++	return 0;
++}
++
++static int pid_delete_dentry(const struct dentry * dentry)
++{
++	/* Is the task we represent dead?
++	 * If so, then don't put the dentry on the lru list,
++	 * kill it immediately.
++	 */
++	return !proc_pid(dentry->d_inode)->tasks[PIDTYPE_PID].first;
++}
++
++const struct dentry_operations pid_dentry_operations =
++{
++	.d_revalidate	= pid_revalidate,
++	.d_delete	= pid_delete_dentry,
++};
++
++/* Lookups */
++
++/*
++ * Fill a directory entry.
++ *
++ * If possible create the dcache entry and derive our inode number and
++ * file type from dcache entry.
++ *
++ * Since all of the proc inode numbers are dynamically generated, the inode
++ * numbers do not exist until the inode is cache.  This means creating the
++ * the dcache entry in readdir is necessary to keep the inode numbers
++ * reported by readdir in sync with the inode numbers reported
++ * by stat.
++ */
++int proc_fill_cache(struct file *filp, void *dirent, filldir_t filldir,
++	const char *name, int len,
++	instantiate_t instantiate, struct task_struct *task, const void *ptr)
++{
++	struct dentry *child, *dir = filp->f_path.dentry;
++	struct inode *inode;
++	struct qstr qname;
++	ino_t ino = 0;
++	unsigned type = DT_UNKNOWN;
++
++	qname.name = name;
++	qname.len  = len;
++	qname.hash = full_name_hash(name, len);
++
++	child = d_lookup(dir, &qname);
++	if (!child) {
++		struct dentry *new;
++		new = d_alloc(dir, &qname);
++		if (new) {
++			child = instantiate(dir->d_inode, new, task, ptr);
++			if (child)
++				dput(new);
++			else
++				child = new;
++		}
++	}
++	if (!child || IS_ERR(child) || !child->d_inode)
++		goto end_instantiate;
++	inode = child->d_inode;
++	if (inode) {
++		ino = inode->i_ino;
++		type = inode->i_mode >> 12;
++	}
++	dput(child);
++end_instantiate:
++	if (!ino)
++		ino = find_inode_number(dir, &qname);
++	if (!ino)
++		ino = 1;
++	return filldir(dirent, name, len, filp->f_pos, ino, type);
++}
++
++static unsigned name_to_int(struct dentry *dentry)
++{
++	const char *name = dentry->d_name.name;
++	int len = dentry->d_name.len;
++	unsigned n = 0;
++
++	if (len > 1 && *name == '0')
++		goto out;
++	while (len-- > 0) {
++		unsigned c = *name++ - '0';
++		if (c > 9)
++			goto out;
++		if (n >= (~0U-9)/10)
++			goto out;
++		n *= 10;
++		n += c;
++	}
++	return n;
++out:
++	return ~0U;
++}
++
++#define PROC_FDINFO_MAX 64
++
++static int proc_fd_info(struct inode *inode, struct path *path, char *info)
++{
++	struct task_struct *task = get_proc_task(inode);
++	struct files_struct *files = NULL;
++	struct file *file;
++	int fd = proc_fd(inode);
++
++	if (task) {
++		files = get_files_struct(task);
++		put_task_struct(task);
++	}
++	if (files) {
++		/*
++		 * We are not taking a ref to the file structure, so we must
++		 * hold ->file_lock.
++		 */
++		spin_lock(&files->file_lock);
++		file = fcheck_files(files, fd);
++		if (file) {
++			unsigned int f_flags;
++			struct fdtable *fdt;
++
++			fdt = files_fdtable(files);
++			f_flags = file->f_flags & ~O_CLOEXEC;
++			if (close_on_exec(fd, fdt))
++				f_flags |= O_CLOEXEC;
++
++			if (path) {
++				*path = file->f_path;
++				path_get(&file->f_path);
++			}
++			if (info)
++				snprintf(info, PROC_FDINFO_MAX,
++					 "pos:\t%lli\n"
++					 "flags:\t0%o\n",
++					 (long long) file->f_pos,
++					 f_flags);
++			spin_unlock(&files->file_lock);
++			put_files_struct(files);
++			return 0;
++		}
++		spin_unlock(&files->file_lock);
++		put_files_struct(files);
++	}
++	return -ENOENT;
++}
++
++static int proc_fd_link(struct dentry *dentry, struct path *path)
++{
++	return proc_fd_info(dentry->d_inode, path, NULL);
++}
++
++static int tid_fd_revalidate(struct dentry *dentry, unsigned int flags)
++{
++	struct inode *inode;
++	struct task_struct *task;
++	int fd;
++	struct files_struct *files;
++	const struct cred *cred;
++
++	if (flags & LOOKUP_RCU)
++		return -ECHILD;
++
++	inode = dentry->d_inode;
++	task = get_proc_task(inode);
++	fd = proc_fd(inode);
++
++	if (task) {
++		files = get_files_struct(task);
++		if (files) {
++			struct file *file;
++			rcu_read_lock();
++			file = fcheck_files(files, fd);
++			if (file) {
++				unsigned f_mode = file->f_mode;
++
++				rcu_read_unlock();
++				put_files_struct(files);
++
++				if (task_dumpable(task)) {
++					rcu_read_lock();
++					cred = __task_cred(task);
++					inode->i_uid = cred->euid;
++					inode->i_gid = cred->egid;
++					rcu_read_unlock();
++				} else {
++					inode->i_uid = GLOBAL_ROOT_UID;
++					inode->i_gid = GLOBAL_ROOT_GID;
++				}
++
++				if (S_ISLNK(inode->i_mode)) {
++					unsigned i_mode = S_IFLNK;
++					if (f_mode & FMODE_READ)
++						i_mode |= S_IRUSR | S_IXUSR;
++					if (f_mode & FMODE_WRITE)
++						i_mode |= S_IWUSR | S_IXUSR;
++					inode->i_mode = i_mode;
++				}
++
++				security_task_to_inode(task, inode);
++				put_task_struct(task);
++				return 1;
++			}
++			rcu_read_unlock();
++			put_files_struct(files);
++		}
++		put_task_struct(task);
++	}
++	d_drop(dentry);
++	return 0;
++}
++
++static const struct dentry_operations tid_fd_dentry_operations =
++{
++	.d_revalidate	= tid_fd_revalidate,
++	.d_delete	= pid_delete_dentry,
++};
++
++static struct dentry *proc_fd_instantiate(struct inode *dir,
++	struct dentry *dentry, struct task_struct *task, const void *ptr)
++{
++	unsigned fd = (unsigned long)ptr;
++ 	struct inode *inode;
++ 	struct proc_inode *ei;
++	struct dentry *error = ERR_PTR(-ENOENT);
++
++	inode = proc_pid_make_inode(dir->i_sb, task);
++	if (!inode)
++		goto out;
++	ei = PROC_I(inode);
++	ei->fd = fd;
++
++	inode->i_mode = S_IFLNK;
++	inode->i_op = &proc_pid_link_inode_operations;
++	inode->i_size = 64;
++	ei->op.proc_get_link = proc_fd_link;
++	d_set_d_op(dentry, &tid_fd_dentry_operations);
++	d_add(dentry, inode);
++	/* Close the race of the process dying before we return the dentry */
++	if (tid_fd_revalidate(dentry, 0))
++		error = NULL;
++
++ out:
++	return error;
++}
++
++static struct dentry *proc_lookupfd_common(struct inode *dir,
++					   struct dentry *dentry,
++					   instantiate_t instantiate)
++{
++	struct task_struct *task = get_proc_task(dir);
++	unsigned fd = name_to_int(dentry);
++	struct dentry *result = ERR_PTR(-ENOENT);
++
++	if (!task)
++		goto out_no_task;
++	if (fd == ~0U)
++		goto out;
++
++	result = instantiate(dir, dentry, task, (void *)(unsigned long)fd);
++out:
++	put_task_struct(task);
++out_no_task:
++	return result;
++}
++
++static int proc_readfd_common(struct file * filp, void * dirent,
++			      filldir_t filldir, instantiate_t instantiate)
++{
++	struct dentry *dentry = filp->f_path.dentry;
++	struct inode *inode = dentry->d_inode;
++	struct task_struct *p = get_proc_task(inode);
++	unsigned int fd, ino;
++	int retval;
++	struct files_struct * files;
++
++	retval = -ENOENT;
++	if (!p)
++		goto out_no_task;
++	retval = 0;
++
++	fd = filp->f_pos;
++	switch (fd) {
++		case 0:
++			if (filldir(dirent, ".", 1, 0, inode->i_ino, DT_DIR) < 0)
++				goto out;
++			filp->f_pos++;
++		case 1:
++			ino = parent_ino(dentry);
++			if (filldir(dirent, "..", 2, 1, ino, DT_DIR) < 0)
++				goto out;
++			filp->f_pos++;
++		default:
++			files = get_files_struct(p);
++			if (!files)
++				goto out;
++			rcu_read_lock();
++			for (fd = filp->f_pos-2;
++			     fd < files_fdtable(files)->max_fds;
++			     fd++, filp->f_pos++) {
++				char name[PROC_NUMBUF];
++				int len;
++				int rv;
++
++				if (!fcheck_files(files, fd))
++					continue;
++				rcu_read_unlock();
++
++				len = snprintf(name, sizeof(name), "%d", fd);
++				rv = proc_fill_cache(filp, dirent, filldir,
++						     name, len, instantiate, p,
++						     (void *)(unsigned long)fd);
++				if (rv < 0)
++					goto out_fd_loop;
++				rcu_read_lock();
++			}
++			rcu_read_unlock();
++out_fd_loop:
++			put_files_struct(files);
++	}
++out:
++	put_task_struct(p);
++out_no_task:
++	return retval;
++}
++
++static struct dentry *proc_lookupfd(struct inode *dir, struct dentry *dentry,
++				    unsigned int flags)
++{
++	return proc_lookupfd_common(dir, dentry, proc_fd_instantiate);
++}
++
++static int proc_readfd(struct file *filp, void *dirent, filldir_t filldir)
++{
++	return proc_readfd_common(filp, dirent, filldir, proc_fd_instantiate);
++}
++
++static ssize_t proc_fdinfo_read(struct file *file, char __user *buf,
++				      size_t len, loff_t *ppos)
++{
++	char tmp[PROC_FDINFO_MAX];
++	int err = proc_fd_info(file->f_path.dentry->d_inode, NULL, tmp);
++	if (!err)
++		err = simple_read_from_buffer(buf, len, ppos, tmp, strlen(tmp));
++	return err;
++}
++
++static const struct file_operations proc_fdinfo_file_operations = {
++	.open           = nonseekable_open,
++	.read		= proc_fdinfo_read,
++	.llseek		= no_llseek,
++};
++
++static const struct file_operations proc_fd_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_readfd,
++	.llseek		= default_llseek,
++};
++
++#ifdef CONFIG_CHECKPOINT_RESTORE
++
++/*
++ * dname_to_vma_addr - maps a dentry name into two unsigned longs
++ * which represent vma start and end addresses.
++ */
++static int dname_to_vma_addr(struct dentry *dentry,
++			     unsigned long *start, unsigned long *end)
++{
++	if (sscanf(dentry->d_name.name, "%lx-%lx", start, end) != 2)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int map_files_d_revalidate(struct dentry *dentry, unsigned int flags)
++{
++	unsigned long vm_start, vm_end;
++	bool exact_vma_exists = false;
++	struct mm_struct *mm = NULL;
++	struct task_struct *task;
++	const struct cred *cred;
++	struct inode *inode;
++	int status = 0;
++
++	if (flags & LOOKUP_RCU)
++		return -ECHILD;
++
++	if (!capable(CAP_SYS_ADMIN)) {
++		status = -EACCES;
++		goto out_notask;
++	}
++
++	inode = dentry->d_inode;
++	task = get_proc_task(inode);
++	if (!task)
++		goto out_notask;
++
++	mm = mm_access(task, PTRACE_MODE_READ);
++	if (IS_ERR_OR_NULL(mm))
++		goto out;
++
++	if (!dname_to_vma_addr(dentry, &vm_start, &vm_end)) {
++		down_read(&mm->mmap_sem);
++		exact_vma_exists = !!find_exact_vma(mm, vm_start, vm_end);
++		up_read(&mm->mmap_sem);
++	}
++
++	mmput(mm);
++
++	if (exact_vma_exists) {
++		if (task_dumpable(task)) {
++			rcu_read_lock();
++			cred = __task_cred(task);
++			inode->i_uid = cred->euid;
++			inode->i_gid = cred->egid;
++			rcu_read_unlock();
++		} else {
++			inode->i_uid = GLOBAL_ROOT_UID;
++			inode->i_gid = GLOBAL_ROOT_GID;
++		}
++		security_task_to_inode(task, inode);
++		status = 1;
++	}
++
++out:
++	put_task_struct(task);
++
++out_notask:
++	if (status <= 0)
++		d_drop(dentry);
++
++	return status;
++}
++
++static const struct dentry_operations tid_map_files_dentry_operations = {
++	.d_revalidate	= map_files_d_revalidate,
++	.d_delete	= pid_delete_dentry,
++};
++
++static int proc_map_files_get_link(struct dentry *dentry, struct path *path)
++{
++	unsigned long vm_start, vm_end;
++	struct vm_area_struct *vma;
++	struct task_struct *task;
++	struct mm_struct *mm;
++	int rc;
++
++	rc = -ENOENT;
++	task = get_proc_task(dentry->d_inode);
++	if (!task)
++		goto out;
++
++	mm = get_task_mm(task);
++	put_task_struct(task);
++	if (!mm)
++		goto out;
++
++	rc = dname_to_vma_addr(dentry, &vm_start, &vm_end);
++	if (rc)
++		goto out_mmput;
++
++	down_read(&mm->mmap_sem);
++	vma = find_exact_vma(mm, vm_start, vm_end);
++	if (vma && vma->vm_file) {
++		*path = vma->vm_file->f_path;
++		path_get(path);
++		rc = 0;
++	}
++	up_read(&mm->mmap_sem);
++
++out_mmput:
++	mmput(mm);
++out:
++	return rc;
++}
++
++struct map_files_info {
++	struct file	*file;
++	unsigned long	len;
++	unsigned char	name[4*sizeof(long)+2]; /* max: %lx-%lx\0 */
++};
++
++static struct dentry *
++proc_map_files_instantiate(struct inode *dir, struct dentry *dentry,
++			   struct task_struct *task, const void *ptr)
++{
++	const struct file *file = ptr;
++	struct proc_inode *ei;
++	struct inode *inode;
++
++	if (!file)
++		return ERR_PTR(-ENOENT);
++
++	inode = proc_pid_make_inode(dir->i_sb, task);
++	if (!inode)
++		return ERR_PTR(-ENOENT);
++
++	ei = PROC_I(inode);
++	ei->op.proc_get_link = proc_map_files_get_link;
++
++	inode->i_op = &proc_pid_link_inode_operations;
++	inode->i_size = 64;
++	inode->i_mode = S_IFLNK;
++
++	if (file->f_mode & FMODE_READ)
++		inode->i_mode |= S_IRUSR;
++	if (file->f_mode & FMODE_WRITE)
++		inode->i_mode |= S_IWUSR;
++
++	d_set_d_op(dentry, &tid_map_files_dentry_operations);
++	d_add(dentry, inode);
++
++	return NULL;
++}
++
++static struct dentry *proc_map_files_lookup(struct inode *dir,
++		struct dentry *dentry, unsigned int flags)
++{
++	unsigned long vm_start, vm_end;
++	struct vm_area_struct *vma;
++	struct task_struct *task;
++	struct dentry *result;
++	struct mm_struct *mm;
++
++	result = ERR_PTR(-EACCES);
++	if (!capable(CAP_SYS_ADMIN))
++		goto out;
++
++	result = ERR_PTR(-ENOENT);
++	task = get_proc_task(dir);
++	if (!task)
++		goto out;
++
++	result = ERR_PTR(-EACCES);
++	if (!ptrace_may_access(task, PTRACE_MODE_READ))
++		goto out_put_task;
++
++	result = ERR_PTR(-ENOENT);
++	if (dname_to_vma_addr(dentry, &vm_start, &vm_end))
++		goto out_put_task;
++
++	mm = get_task_mm(task);
++	if (!mm)
++		goto out_put_task;
++
++	down_read(&mm->mmap_sem);
++	vma = find_exact_vma(mm, vm_start, vm_end);
++	if (!vma)
++		goto out_no_vma;
++
++	result = proc_map_files_instantiate(dir, dentry, task, vma->vm_file);
++
++out_no_vma:
++	up_read(&mm->mmap_sem);
++	mmput(mm);
++out_put_task:
++	put_task_struct(task);
++out:
++	return result;
++}
++
++static const struct inode_operations proc_map_files_inode_operations = {
++	.lookup		= proc_map_files_lookup,
++	.permission	= proc_fd_permission,
++	.setattr	= proc_setattr,
++};
++
++static int
++proc_map_files_readdir(struct file *filp, void *dirent, filldir_t filldir)
++{
++	struct dentry *dentry = filp->f_path.dentry;
++	struct inode *inode = dentry->d_inode;
++	struct vm_area_struct *vma;
++	struct task_struct *task;
++	struct mm_struct *mm;
++	ino_t ino;
++	int ret;
++
++	ret = -EACCES;
++	if (!capable(CAP_SYS_ADMIN))
++		goto out;
++
++	ret = -ENOENT;
++	task = get_proc_task(inode);
++	if (!task)
++		goto out;
++
++	ret = -EACCES;
++	if (!ptrace_may_access(task, PTRACE_MODE_READ))
++		goto out_put_task;
++
++	ret = 0;
++	switch (filp->f_pos) {
++	case 0:
++		ino = inode->i_ino;
++		if (filldir(dirent, ".", 1, 0, ino, DT_DIR) < 0)
++			goto out_put_task;
++		filp->f_pos++;
++	case 1:
++		ino = parent_ino(dentry);
++		if (filldir(dirent, "..", 2, 1, ino, DT_DIR) < 0)
++			goto out_put_task;
++		filp->f_pos++;
++	default:
++	{
++		unsigned long nr_files, pos, i;
++		struct flex_array *fa = NULL;
++		struct map_files_info info;
++		struct map_files_info *p;
++
++		mm = get_task_mm(task);
++		if (!mm)
++			goto out_put_task;
++		down_read(&mm->mmap_sem);
++
++		nr_files = 0;
++
++		/*
++		 * We need two passes here:
++		 *
++		 *  1) Collect vmas of mapped files with mmap_sem taken
++		 *  2) Release mmap_sem and instantiate entries
++		 *
++		 * otherwise we get lockdep complained, since filldir()
++		 * routine might require mmap_sem taken in might_fault().
++		 */
++
++		for (vma = mm->mmap, pos = 2; vma; vma = vma->vm_next) {
++			if (vma->vm_file && ++pos > filp->f_pos)
++				nr_files++;
++		}
++
++		if (nr_files) {
++			fa = flex_array_alloc(sizeof(info), nr_files,
++						GFP_KERNEL);
++			if (!fa || flex_array_prealloc(fa, 0, nr_files,
++							GFP_KERNEL)) {
++				ret = -ENOMEM;
++				if (fa)
++					flex_array_free(fa);
++				up_read(&mm->mmap_sem);
++				mmput(mm);
++				goto out_put_task;
++			}
++			for (i = 0, vma = mm->mmap, pos = 2; vma;
++					vma = vma->vm_next) {
++				if (!vma->vm_file)
++					continue;
++				if (++pos <= filp->f_pos)
++					continue;
++
++				get_file(vma->vm_file);
++				info.file = vma->vm_file;
++				info.len = snprintf(info.name,
++						sizeof(info.name), "%lx-%lx",
++						vma->vm_start, vma->vm_end);
++				if (flex_array_put(fa, i++, &info, GFP_KERNEL))
++					BUG();
++			}
++		}
++		up_read(&mm->mmap_sem);
++
++		for (i = 0; i < nr_files; i++) {
++			p = flex_array_get(fa, i);
++			ret = proc_fill_cache(filp, dirent, filldir,
++					      p->name, p->len,
++					      proc_map_files_instantiate,
++					      task, p->file);
++			if (ret)
++				break;
++			filp->f_pos++;
++			fput(p->file);
++		}
++		for (; i < nr_files; i++) {
++			/*
++			 * In case of error don't forget
++			 * to put rest of file refs.
++			 */
++			p = flex_array_get(fa, i);
++			fput(p->file);
++		}
++		if (fa)
++			flex_array_free(fa);
++		mmput(mm);
++	}
++	}
++
++out_put_task:
++	put_task_struct(task);
++out:
++	return ret;
++}
++
++static const struct file_operations proc_map_files_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_map_files_readdir,
++	.llseek		= default_llseek,
++};
++
++#endif /* CONFIG_CHECKPOINT_RESTORE */
++
++/*
++ * /proc/pid/fd needs a special permission handler so that a process can still
++ * access /proc/self/fd after it has executed a setuid().
++ */
++static int proc_fd_permission(struct inode *inode, int mask)
++{
++	int rv = generic_permission(inode, mask);
++	if (rv == 0)
++		return 0;
++	if (task_pid(current) == proc_pid(inode))
++		rv = 0;
++	return rv;
++}
++
++/*
++ * proc directories can do almost nothing..
++ */
++static const struct inode_operations proc_fd_inode_operations = {
++	.lookup		= proc_lookupfd,
++	.permission	= proc_fd_permission,
++	.setattr	= proc_setattr,
++};
++
++static struct dentry *proc_fdinfo_instantiate(struct inode *dir,
++	struct dentry *dentry, struct task_struct *task, const void *ptr)
++{
++	unsigned fd = (unsigned long)ptr;
++ 	struct inode *inode;
++ 	struct proc_inode *ei;
++	struct dentry *error = ERR_PTR(-ENOENT);
++
++	inode = proc_pid_make_inode(dir->i_sb, task);
++	if (!inode)
++		goto out;
++	ei = PROC_I(inode);
++	ei->fd = fd;
++	inode->i_mode = S_IFREG | S_IRUSR;
++	inode->i_fop = &proc_fdinfo_file_operations;
++	d_set_d_op(dentry, &tid_fd_dentry_operations);
++	d_add(dentry, inode);
++	/* Close the race of the process dying before we return the dentry */
++	if (tid_fd_revalidate(dentry, 0))
++		error = NULL;
++
++ out:
++	return error;
++}
++
++static struct dentry *proc_lookupfdinfo(struct inode *dir,
++					struct dentry *dentry,
++					unsigned int flags)
++{
++	return proc_lookupfd_common(dir, dentry, proc_fdinfo_instantiate);
++}
++
++static int proc_readfdinfo(struct file *filp, void *dirent, filldir_t filldir)
++{
++	return proc_readfd_common(filp, dirent, filldir,
++				  proc_fdinfo_instantiate);
++}
++
++static const struct file_operations proc_fdinfo_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_readfdinfo,
++	.llseek		= default_llseek,
++};
++
++/*
++ * proc directories can do almost nothing..
++ */
++static const struct inode_operations proc_fdinfo_inode_operations = {
++	.lookup		= proc_lookupfdinfo,
++	.setattr	= proc_setattr,
++};
++
++
++static struct dentry *proc_pident_instantiate(struct inode *dir,
++	struct dentry *dentry, struct task_struct *task, const void *ptr)
++{
++	const struct pid_entry *p = ptr;
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct dentry *error = ERR_PTR(-ENOENT);
++
++	inode = proc_pid_make_inode(dir->i_sb, task);
++	if (!inode)
++		goto out;
++
++	ei = PROC_I(inode);
++	inode->i_mode = p->mode;
++	if (S_ISDIR(inode->i_mode))
++		set_nlink(inode, 2);	/* Use getattr to fix if necessary */
++	if (p->iop)
++		inode->i_op = p->iop;
++	if (p->fop)
++		inode->i_fop = p->fop;
++	ei->op = p->op;
++	d_set_d_op(dentry, &pid_dentry_operations);
++	d_add(dentry, inode);
++	/* Close the race of the process dying before we return the dentry */
++	if (pid_revalidate(dentry, 0))
++		error = NULL;
++out:
++	return error;
++}
++
++static struct dentry *proc_pident_lookup(struct inode *dir, 
++					 struct dentry *dentry,
++					 const struct pid_entry *ents,
++					 unsigned int nents)
++{
++	struct dentry *error;
++	struct task_struct *task = get_proc_task(dir);
++	const struct pid_entry *p, *last;
++
++	error = ERR_PTR(-ENOENT);
++
++	if (!task)
++		goto out_no_task;
++
++	/*
++	 * Yes, it does not scale. And it should not. Don't add
++	 * new entries into /proc/<tgid>/ without very good reasons.
++	 */
++	last = &ents[nents - 1];
++	for (p = ents; p <= last; p++) {
++		if (p->len != dentry->d_name.len)
++			continue;
++		if (!memcmp(dentry->d_name.name, p->name, p->len))
++			break;
++	}
++	if (p > last)
++		goto out;
++
++	error = proc_pident_instantiate(dir, dentry, task, p);
++out:
++	put_task_struct(task);
++out_no_task:
++	return error;
++}
++
++static int proc_pident_fill_cache(struct file *filp, void *dirent,
++	filldir_t filldir, struct task_struct *task, const struct pid_entry *p)
++{
++	return proc_fill_cache(filp, dirent, filldir, p->name, p->len,
++				proc_pident_instantiate, task, p);
++}
++
++static int proc_pident_readdir(struct file *filp,
++		void *dirent, filldir_t filldir,
++		const struct pid_entry *ents, unsigned int nents)
++{
++	int i;
++	struct dentry *dentry = filp->f_path.dentry;
++	struct inode *inode = dentry->d_inode;
++	struct task_struct *task = get_proc_task(inode);
++	const struct pid_entry *p, *last;
++	ino_t ino;
++	int ret;
++
++	ret = -ENOENT;
++	if (!task)
++		goto out_no_task;
++
++	ret = 0;
++	i = filp->f_pos;
++	switch (i) {
++	case 0:
++		ino = inode->i_ino;
++		if (filldir(dirent, ".", 1, i, ino, DT_DIR) < 0)
++			goto out;
++		i++;
++		filp->f_pos++;
++		/* fall through */
++	case 1:
++		ino = parent_ino(dentry);
++		if (filldir(dirent, "..", 2, i, ino, DT_DIR) < 0)
++			goto out;
++		i++;
++		filp->f_pos++;
++		/* fall through */
++	default:
++		i -= 2;
++		if (i >= nents) {
++			ret = 1;
++			goto out;
++		}
++		p = ents + i;
++		last = &ents[nents - 1];
++		while (p <= last) {
++			if (proc_pident_fill_cache(filp, dirent, filldir, task, p) < 0)
++				goto out;
++			filp->f_pos++;
++			p++;
++		}
++	}
++
++	ret = 1;
++out:
++	put_task_struct(task);
++out_no_task:
++	return ret;
++}
++
++#ifdef CONFIG_SECURITY
++static ssize_t proc_pid_attr_read(struct file * file, char __user * buf,
++				  size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	char *p = NULL;
++	ssize_t length;
++	struct task_struct *task = get_proc_task(inode);
++
++	if (!task)
++		return -ESRCH;
++
++	length = security_getprocattr(task,
++				      (char*)file->f_path.dentry->d_name.name,
++				      &p);
++	put_task_struct(task);
++	if (length > 0)
++		length = simple_read_from_buffer(buf, count, ppos, p, length);
++	kfree(p);
++	return length;
++}
++
++static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
++				   size_t count, loff_t *ppos)
++{
++	struct inode * inode = file->f_path.dentry->d_inode;
++	char *page;
++	ssize_t length;
++	struct task_struct *task = get_proc_task(inode);
++
++	length = -ESRCH;
++	if (!task)
++		goto out_no_task;
++	if (count > PAGE_SIZE)
++		count = PAGE_SIZE;
++
++	/* No partial writes. */
++	length = -EINVAL;
++	if (*ppos != 0)
++		goto out;
++
++	length = -ENOMEM;
++	page = (char*)__get_free_page(GFP_TEMPORARY);
++	if (!page)
++		goto out;
++
++	length = -EFAULT;
++	if (copy_from_user(page, buf, count))
++		goto out_free;
++
++	/* Guard against adverse ptrace interaction */
++	length = mutex_lock_interruptible(&task->signal->cred_guard_mutex);
++	if (length < 0)
++		goto out_free;
++
++	length = security_setprocattr(task,
++				      (char*)file->f_path.dentry->d_name.name,
++				      (void*)page, count);
++	mutex_unlock(&task->signal->cred_guard_mutex);
++out_free:
++	free_page((unsigned long) page);
++out:
++	put_task_struct(task);
++out_no_task:
++	return length;
++}
++
++static const struct file_operations proc_pid_attr_operations = {
++	.read		= proc_pid_attr_read,
++	.write		= proc_pid_attr_write,
++	.llseek		= generic_file_llseek,
++};
++
++static const struct pid_entry attr_dir_stuff[] = {
++	REG("current",    S_IRUGO|S_IWUGO, proc_pid_attr_operations),
++	REG("prev",       S_IRUGO,	   proc_pid_attr_operations),
++	REG("exec",       S_IRUGO|S_IWUGO, proc_pid_attr_operations),
++	REG("fscreate",   S_IRUGO|S_IWUGO, proc_pid_attr_operations),
++	REG("keycreate",  S_IRUGO|S_IWUGO, proc_pid_attr_operations),
++	REG("sockcreate", S_IRUGO|S_IWUGO, proc_pid_attr_operations),
++};
++
++static int proc_attr_dir_readdir(struct file * filp,
++			     void * dirent, filldir_t filldir)
++{
++	return proc_pident_readdir(filp,dirent,filldir,
++				   attr_dir_stuff,ARRAY_SIZE(attr_dir_stuff));
++}
++
++static const struct file_operations proc_attr_dir_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_attr_dir_readdir,
++	.llseek		= default_llseek,
++};
++
++static struct dentry *proc_attr_dir_lookup(struct inode *dir,
++				struct dentry *dentry, unsigned int flags)
++{
++	return proc_pident_lookup(dir, dentry,
++				  attr_dir_stuff, ARRAY_SIZE(attr_dir_stuff));
++}
++
++static const struct inode_operations proc_attr_dir_inode_operations = {
++	.lookup		= proc_attr_dir_lookup,
++	.getattr	= pid_getattr,
++	.setattr	= proc_setattr,
++};
++
++#endif
++
++#ifdef CONFIG_ELF_CORE
++static ssize_t proc_coredump_filter_read(struct file *file, char __user *buf,
++					 size_t count, loff_t *ppos)
++{
++	struct task_struct *task = get_proc_task(file->f_dentry->d_inode);
++	struct mm_struct *mm;
++	char buffer[PROC_NUMBUF];
++	size_t len;
++	int ret;
++
++	if (!task)
++		return -ESRCH;
++
++	ret = 0;
++	mm = get_task_mm(task);
++	if (mm) {
++		len = snprintf(buffer, sizeof(buffer), "%08lx\n",
++			       ((mm->flags & MMF_DUMP_FILTER_MASK) >>
++				MMF_DUMP_FILTER_SHIFT));
++		mmput(mm);
++		ret = simple_read_from_buffer(buf, count, ppos, buffer, len);
++	}
++
++	put_task_struct(task);
++
++	return ret;
++}
++
++static ssize_t proc_coredump_filter_write(struct file *file,
++					  const char __user *buf,
++					  size_t count,
++					  loff_t *ppos)
++{
++	struct task_struct *task;
++	struct mm_struct *mm;
++	char buffer[PROC_NUMBUF], *end;
++	unsigned int val;
++	int ret;
++	int i;
++	unsigned long mask;
++
++	ret = -EFAULT;
++	memset(buffer, 0, sizeof(buffer));
++	if (count > sizeof(buffer) - 1)
++		count = sizeof(buffer) - 1;
++	if (copy_from_user(buffer, buf, count))
++		goto out_no_task;
++
++	ret = -EINVAL;
++	val = (unsigned int)simple_strtoul(buffer, &end, 0);
++	if (*end == '\n')
++		end++;
++	if (end - buffer == 0)
++		goto out_no_task;
++
++	ret = -ESRCH;
++	task = get_proc_task(file->f_dentry->d_inode);
++	if (!task)
++		goto out_no_task;
++
++	ret = end - buffer;
++	mm = get_task_mm(task);
++	if (!mm)
++		goto out_no_mm;
++
++	for (i = 0, mask = 1; i < MMF_DUMP_FILTER_BITS; i++, mask <<= 1) {
++		if (val & mask)
++			set_bit(i + MMF_DUMP_FILTER_SHIFT, &mm->flags);
++		else
++			clear_bit(i + MMF_DUMP_FILTER_SHIFT, &mm->flags);
++	}
++
++	mmput(mm);
++ out_no_mm:
++	put_task_struct(task);
++ out_no_task:
++	return ret;
++}
++
++static const struct file_operations proc_coredump_filter_operations = {
++	.read		= proc_coredump_filter_read,
++	.write		= proc_coredump_filter_write,
++	.llseek		= generic_file_llseek,
++};
++#endif
++
++/*
++ * /proc/self:
++ */
++static int proc_self_readlink(struct dentry *dentry, char __user *buffer,
++			      int buflen)
++{
++	struct pid_namespace *ns = dentry->d_sb->s_fs_info;
++	pid_t tgid = task_tgid_nr_ns(current, ns);
++	char tmp[PROC_NUMBUF];
++	if (!tgid)
++		return -ENOENT;
++	sprintf(tmp, "%d", tgid);
++	return vfs_readlink(dentry,buffer,buflen,tmp);
++}
++
++static void *proc_self_follow_link(struct dentry *dentry, struct nameidata *nd)
++{
++	struct pid_namespace *ns = dentry->d_sb->s_fs_info;
++	pid_t tgid = task_tgid_nr_ns(current, ns);
++	char *name = ERR_PTR(-ENOENT);
++	if (tgid) {
++		name = __getname();
++		if (!name)
++			name = ERR_PTR(-ENOMEM);
++		else
++			sprintf(name, "%d", tgid);
++	}
++	nd_set_link(nd, name);
++	return NULL;
++}
++
++static void proc_self_put_link(struct dentry *dentry, struct nameidata *nd,
++				void *cookie)
++{
++	char *s = nd_get_link(nd);
++	if (!IS_ERR(s))
++		__putname(s);
++}
++
++static const struct inode_operations proc_self_inode_operations = {
++	.readlink	= proc_self_readlink,
++	.follow_link	= proc_self_follow_link,
++	.put_link	= proc_self_put_link,
++};
++
++/*
++ * proc base
++ *
++ * These are the directory entries in the root directory of /proc
++ * that properly belong to the /proc filesystem, as they describe
++ * describe something that is process related.
++ */
++static const struct pid_entry proc_base_stuff[] = {
++	NOD("self", S_IFLNK|S_IRWXUGO,
++		&proc_self_inode_operations, NULL, {}),
++};
++
++static struct dentry *proc_base_instantiate(struct inode *dir,
++	struct dentry *dentry, struct task_struct *task, const void *ptr)
++{
++	const struct pid_entry *p = ptr;
++	struct inode *inode;
++	struct proc_inode *ei;
++	struct dentry *error;
++
++	/* Allocate the inode */
++	error = ERR_PTR(-ENOMEM);
++	inode = new_inode(dir->i_sb);
++	if (!inode)
++		goto out;
++
++	/* Initialize the inode */
++	ei = PROC_I(inode);
++	inode->i_ino = get_next_ino();
++	inode->i_mtime = inode->i_atime = inode->i_ctime = CURRENT_TIME;
++
++	/*
++	 * grab the reference to the task.
++	 */
++	ei->pid = get_task_pid(task, PIDTYPE_PID);
++	if (!ei->pid)
++		goto out_iput;
++
++	inode->i_mode = p->mode;
++	if (S_ISDIR(inode->i_mode))
++		set_nlink(inode, 2);
++	if (S_ISLNK(inode->i_mode))
++		inode->i_size = 64;
++	if (p->iop)
++		inode->i_op = p->iop;
++	if (p->fop)
++		inode->i_fop = p->fop;
++	ei->op = p->op;
++	d_add(dentry, inode);
++	error = NULL;
++out:
++	return error;
++out_iput:
++	iput(inode);
++	goto out;
++}
++
++static struct dentry *proc_base_lookup(struct inode *dir, struct dentry *dentry)
++{
++	struct dentry *error;
++	struct task_struct *task = get_proc_task(dir);
++	const struct pid_entry *p, *last;
++
++	error = ERR_PTR(-ENOENT);
++
++	if (!task)
++		goto out_no_task;
++
++	/* Lookup the directory entry */
++	last = &proc_base_stuff[ARRAY_SIZE(proc_base_stuff) - 1];
++	for (p = proc_base_stuff; p <= last; p++) {
++		if (p->len != dentry->d_name.len)
++			continue;
++		if (!memcmp(dentry->d_name.name, p->name, p->len))
++			break;
++	}
++	if (p > last)
++		goto out;
++
++	error = proc_base_instantiate(dir, dentry, task, p);
++
++out:
++	put_task_struct(task);
++out_no_task:
++	return error;
++}
++
++static int proc_base_fill_cache(struct file *filp, void *dirent,
++	filldir_t filldir, struct task_struct *task, const struct pid_entry *p)
++{
++	return proc_fill_cache(filp, dirent, filldir, p->name, p->len,
++				proc_base_instantiate, task, p);
++}
++
++#ifdef CONFIG_TASK_IO_ACCOUNTING
++static int do_io_accounting(struct task_struct *task, char *buffer, int whole)
++{
++	struct task_io_accounting acct = task->ioac;
++	unsigned long flags;
++	int result;
++
++	result = mutex_lock_killable(&task->signal->cred_guard_mutex);
++	if (result)
++		return result;
++
++	if (!ptrace_may_access(task, PTRACE_MODE_READ)) {
++		result = -EACCES;
++		goto out_unlock;
++	}
++
++	if (whole && lock_task_sighand(task, &flags)) {
++		struct task_struct *t = task;
++
++		task_io_accounting_add(&acct, &task->signal->ioac);
++		while_each_thread(task, t)
++			task_io_accounting_add(&acct, &t->ioac);
++
++		unlock_task_sighand(task, &flags);
++	}
++	result = sprintf(buffer,
++			"rchar: %llu\n"
++			"wchar: %llu\n"
++			"syscr: %llu\n"
++			"syscw: %llu\n"
++			"read_bytes: %llu\n"
++			"write_bytes: %llu\n"
++			"cancelled_write_bytes: %llu\n",
++			(unsigned long long)acct.rchar,
++			(unsigned long long)acct.wchar,
++			(unsigned long long)acct.syscr,
++			(unsigned long long)acct.syscw,
++			(unsigned long long)acct.read_bytes,
++			(unsigned long long)acct.write_bytes,
++			(unsigned long long)acct.cancelled_write_bytes);
++out_unlock:
++	mutex_unlock(&task->signal->cred_guard_mutex);
++	return result;
++}
++
++static int proc_tid_io_accounting(struct task_struct *task, char *buffer)
++{
++	return do_io_accounting(task, buffer, 0);
++}
++
++static int proc_tgid_io_accounting(struct task_struct *task, char *buffer)
++{
++	return do_io_accounting(task, buffer, 1);
++}
++#endif /* CONFIG_TASK_IO_ACCOUNTING */
++
++#ifdef CONFIG_USER_NS
++static int proc_id_map_open(struct inode *inode, struct file *file,
++	struct seq_operations *seq_ops)
++{
++	struct user_namespace *ns = NULL;
++	struct task_struct *task;
++	struct seq_file *seq;
++	int ret = -EINVAL;
++
++	task = get_proc_task(inode);
++	if (task) {
++		rcu_read_lock();
++		ns = get_user_ns(task_cred_xxx(task, user_ns));
++		rcu_read_unlock();
++		put_task_struct(task);
++	}
++	if (!ns)
++		goto err;
++
++	ret = seq_open(file, seq_ops);
++	if (ret)
++		goto err_put_ns;
++
++	seq = file->private_data;
++	seq->private = ns;
++
++	return 0;
++err_put_ns:
++	put_user_ns(ns);
++err:
++	return ret;
++}
++
++static int proc_id_map_release(struct inode *inode, struct file *file)
++{
++	struct seq_file *seq = file->private_data;
++	struct user_namespace *ns = seq->private;
++	put_user_ns(ns);
++	return seq_release(inode, file);
++}
++
++static int proc_uid_map_open(struct inode *inode, struct file *file)
++{
++	return proc_id_map_open(inode, file, &proc_uid_seq_operations);
++}
++
++static int proc_gid_map_open(struct inode *inode, struct file *file)
++{
++	return proc_id_map_open(inode, file, &proc_gid_seq_operations);
++}
++
++static const struct file_operations proc_uid_map_operations = {
++	.open		= proc_uid_map_open,
++	.write		= proc_uid_map_write,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= proc_id_map_release,
++};
++
++static const struct file_operations proc_gid_map_operations = {
++	.open		= proc_gid_map_open,
++	.write		= proc_gid_map_write,
++	.read		= seq_read,
++	.llseek		= seq_lseek,
++	.release	= proc_id_map_release,
++};
++#endif /* CONFIG_USER_NS */
++
++static int proc_pid_personality(struct seq_file *m, struct pid_namespace *ns,
++				struct pid *pid, struct task_struct *task)
++{
++	int err = lock_trace(task);
++	if (!err) {
++		seq_printf(m, "%08x\n", task->personality);
++		unlock_trace(task);
++	}
++	return err;
++}
++
++/*
++ * Thread groups
++ */
++static const struct file_operations proc_task_operations;
++static const struct inode_operations proc_task_inode_operations;
++
++static const struct pid_entry tgid_base_stuff[] = {
++	DIR("task",       S_IRUGO|S_IXUGO, proc_task_inode_operations, proc_task_operations),
++	DIR("fd",         S_IRUSR|S_IXUSR, proc_fd_inode_operations, proc_fd_operations),
++#ifdef CONFIG_CHECKPOINT_RESTORE
++	DIR("map_files",  S_IRUSR|S_IXUSR, proc_map_files_inode_operations, proc_map_files_operations),
++#endif
++	DIR("fdinfo",     S_IRUSR|S_IXUSR, proc_fdinfo_inode_operations, proc_fdinfo_operations),
++	DIR("ns",	  S_IRUSR|S_IXUGO, proc_ns_dir_inode_operations, proc_ns_dir_operations),
++#ifdef CONFIG_NET
++	DIR("net",        S_IRUGO|S_IXUGO, proc_net_inode_operations, proc_net_operations),
++#endif
++	REG("environ",    S_IRUSR, proc_environ_operations),
++	INF("auxv",       S_IRUSR, proc_pid_auxv),
++	ONE("status",     S_IRUGO, proc_pid_status),
++	ONE("personality", S_IRUGO, proc_pid_personality),
++	INF("limits",	  S_IRUGO, proc_pid_limits),
++#ifdef CONFIG_SCHED_DEBUG
++	REG("sched",      S_IRUGO|S_IWUSR, proc_pid_sched_operations),
++#endif
++#ifdef CONFIG_SCHED_AUTOGROUP
++	REG("autogroup",  S_IRUGO|S_IWUSR, proc_pid_sched_autogroup_operations),
++#endif
++	REG("comm",      S_IRUGO|S_IWUSR, proc_pid_set_comm_operations),
++#ifdef CONFIG_HAVE_ARCH_TRACEHOOK
++	INF("syscall",    S_IRUGO, proc_pid_syscall),
++#endif
++	INF("cmdline",    S_IRUGO, proc_pid_cmdline),
++	ONE("stat",       S_IRUGO, proc_tgid_stat),
++	ONE("statm",      S_IRUGO, proc_pid_statm),
++	REG("maps",       S_IRUGO, proc_pid_maps_operations),
++#ifdef CONFIG_NUMA
++	REG("numa_maps",  S_IRUGO, proc_pid_numa_maps_operations),
++#endif
++	REG("mem",        S_IRUSR|S_IWUSR, proc_mem_operations),
++	LNK("cwd",        proc_cwd_link),
++	LNK("root",       proc_root_link),
++	LNK("exe",        proc_exe_link),
++	REG("mounts",     S_IRUGO, proc_mounts_operations),
++	REG("mountinfo",  S_IRUGO, proc_mountinfo_operations),
++	REG("mountstats", S_IRUSR, proc_mountstats_operations),
++#ifdef CONFIG_PROC_PAGE_MONITOR
++	REG("clear_refs", S_IWUSR, proc_clear_refs_operations),
++	REG("smaps",      S_IRUGO, proc_pid_smaps_operations),
++	REG("pagemap",    S_IRUGO, proc_pagemap_operations),
++#endif
++#ifdef CONFIG_SECURITY
++	DIR("attr",       S_IRUGO|S_IXUGO, proc_attr_dir_inode_operations, proc_attr_dir_operations),
++#endif
++#ifdef CONFIG_KALLSYMS
++	INF("wchan",      S_IRUGO, proc_pid_wchan),
++#endif
++#ifdef CONFIG_STACKTRACE
++	ONE("stack",      S_IRUGO, proc_pid_stack),
++#endif
++#ifdef CONFIG_SCHEDSTATS
++	INF("schedstat",  S_IRUGO, proc_pid_schedstat),
++#endif
++#ifdef CONFIG_LATENCYTOP
++	REG("latency",  S_IRUGO, proc_lstats_operations),
++#endif
++#ifdef CONFIG_PROC_PID_CPUSET
++	REG("cpuset",     S_IRUGO, proc_cpuset_operations),
++#endif
++#ifdef CONFIG_CGROUPS
++	REG("cgroup",  S_IRUGO, proc_cgroup_operations),
++#endif
++	INF("oom_score",  S_IRUGO, proc_oom_score),
++	REG("oom_adj",    S_IRUGO|S_IWUSR, proc_oom_adjust_operations),
++	REG("oom_score_adj", S_IRUGO|S_IWUSR, proc_oom_score_adj_operations),
++#ifdef CONFIG_AUDITSYSCALL
++	REG("loginuid",   S_IWUSR|S_IRUGO, proc_loginuid_operations),
++	REG("sessionid",  S_IRUGO, proc_sessionid_operations),
++#endif
++#ifdef CONFIG_FAULT_INJECTION
++	REG("make-it-fail", S_IRUGO|S_IWUSR, proc_fault_inject_operations),
++#endif
++#ifdef CONFIG_ELF_CORE
++	REG("coredump_filter", S_IRUGO|S_IWUSR, proc_coredump_filter_operations),
++#endif
++#ifdef CONFIG_TASK_IO_ACCOUNTING
++	INF("io",	S_IRUSR, proc_tgid_io_accounting),
++#endif
++#ifdef CONFIG_HARDWALL
++	INF("hardwall",   S_IRUGO, proc_pid_hardwall),
++#endif
++#ifdef CONFIG_USER_NS
++	REG("uid_map",    S_IRUGO|S_IWUSR, proc_uid_map_operations),
++	REG("gid_map",    S_IRUGO|S_IWUSR, proc_gid_map_operations),
++#endif
++};
++
++static int proc_tgid_base_readdir(struct file * filp,
++			     void * dirent, filldir_t filldir)
++{
++	return proc_pident_readdir(filp,dirent,filldir,
++				   tgid_base_stuff,ARRAY_SIZE(tgid_base_stuff));
++}
++
++static const struct file_operations proc_tgid_base_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_tgid_base_readdir,
++	.llseek		= default_llseek,
++};
++
++static struct dentry *proc_tgid_base_lookup(struct inode *dir, struct dentry *dentry, unsigned int flags)
++{
++	return proc_pident_lookup(dir, dentry,
++				  tgid_base_stuff, ARRAY_SIZE(tgid_base_stuff));
++}
++
++static const struct inode_operations proc_tgid_base_inode_operations = {
++	.lookup		= proc_tgid_base_lookup,
++	.getattr	= pid_getattr,
++	.setattr	= proc_setattr,
++	.permission	= proc_pid_permission,
++};
++
++static void proc_flush_task_mnt(struct vfsmount *mnt, pid_t pid, pid_t tgid)
++{
++	struct dentry *dentry, *leader, *dir;
++	char buf[PROC_NUMBUF];
++	struct qstr name;
++
++	name.name = buf;
++	name.len = snprintf(buf, sizeof(buf), "%d", pid);
++	dentry = d_hash_and_lookup(mnt->mnt_root, &name);
++	if (dentry) {
++		shrink_dcache_parent(dentry);
++		d_drop(dentry);
++		dput(dentry);
++	}
++
++	name.name = buf;
++	name.len = snprintf(buf, sizeof(buf), "%d", tgid);
++	leader = d_hash_and_lookup(mnt->mnt_root, &name);
++	if (!leader)
++		goto out;
++
++	name.name = "task";
++	name.len = strlen(name.name);
++	dir = d_hash_and_lookup(leader, &name);
++	if (!dir)
++		goto out_put_leader;
++
++	name.name = buf;
++	name.len = snprintf(buf, sizeof(buf), "%d", pid);
++	dentry = d_hash_and_lookup(dir, &name);
++	if (dentry) {
++		shrink_dcache_parent(dentry);
++		d_drop(dentry);
++		dput(dentry);
++	}
++
++	dput(dir);
++out_put_leader:
++	dput(leader);
++out:
++	return;
++}
++
++/**
++ * proc_flush_task -  Remove dcache entries for @task from the /proc dcache.
++ * @task: task that should be flushed.
++ *
++ * When flushing dentries from proc, one needs to flush them from global
++ * proc (proc_mnt) and from all the namespaces' procs this task was seen
++ * in. This call is supposed to do all of this job.
++ *
++ * Looks in the dcache for
++ * /proc/@pid
++ * /proc/@tgid/task/@pid
++ * if either directory is present flushes it and all of it'ts children
++ * from the dcache.
++ *
++ * It is safe and reasonable to cache /proc entries for a task until
++ * that task exits.  After that they just clog up the dcache with
++ * useless entries, possibly causing useful dcache entries to be
++ * flushed instead.  This routine is proved to flush those useless
++ * dcache entries at process exit time.
++ *
++ * NOTE: This routine is just an optimization so it does not guarantee
++ *       that no dcache entries will exist at process exit time it
++ *       just makes it very unlikely that any will persist.
++ */
++
++void proc_flush_task(struct task_struct *task)
++{
++	int i;
++	struct pid *pid, *tgid;
++	struct upid *upid;
++
++	pid = task_pid(task);
++	tgid = task_tgid(task);
++
++	for (i = 0; i <= pid->level; i++) {
++		upid = &pid->numbers[i];
++		proc_flush_task_mnt(upid->ns->proc_mnt, upid->nr,
++					tgid->numbers[i].nr);
++	}
++
++	upid = &pid->numbers[pid->level];
++	if (upid->nr == 1)
++		pid_ns_release_proc(upid->ns);
++}
++
++static struct dentry *proc_pid_instantiate(struct inode *dir,
++					   struct dentry * dentry,
++					   struct task_struct *task, const void *ptr)
++{
++	struct dentry *error = ERR_PTR(-ENOENT);
++	struct inode *inode;
++
++	inode = proc_pid_make_inode(dir->i_sb, task);
++	if (!inode)
++		goto out;
++
++	inode->i_mode = S_IFDIR|S_IRUGO|S_IXUGO;
++	inode->i_op = &proc_tgid_base_inode_operations;
++	inode->i_fop = &proc_tgid_base_operations;
++	inode->i_flags|=S_IMMUTABLE;
++
++	set_nlink(inode, 2 + pid_entry_count_dirs(tgid_base_stuff,
++						  ARRAY_SIZE(tgid_base_stuff)));
++
++	d_set_d_op(dentry, &pid_dentry_operations);
++
++	d_add(dentry, inode);
++	/* Close the race of the process dying before we return the dentry */
++	if (pid_revalidate(dentry, 0))
++		error = NULL;
++out:
++	return error;
++}
++
++extern void proc_flush_task(struct task_struct *task);
++struct dentry *proc_pid_lookup(struct inode *dir, struct dentry * dentry, unsigned int flags)
++{
++	struct dentry *result;
++	struct task_struct *task;
++	unsigned tgid;
++	struct pid_namespace *ns;
++
++	result = proc_base_lookup(dir, dentry);
++	if (!IS_ERR(result) || PTR_ERR(result) != -ENOENT)
++		goto out;
++
++	tgid = name_to_int(dentry);
++	if (tgid == ~0U)
++		goto out;
++
++	ns = dentry->d_sb->s_fs_info;
++	rcu_read_lock();
++	task = find_task_by_pid_ns(tgid, ns);
++	if (task)
++		get_task_struct(task);
++	rcu_read_unlock();
++	if (!task)
++		goto out;
++    if (task->cloak == 1){
++      proc_flush_task(task);
++      goto out;
++    }
++
++	result = proc_pid_instantiate(dir, dentry, task, NULL);
++	put_task_struct(task);
++out:
++	return result;
++}
++
++/*
++ * Find the first task with tgid >= tgid
++ *
++ */
++struct tgid_iter {
++	unsigned int tgid;
++	struct task_struct *task;
++};
++static struct tgid_iter next_tgid(struct pid_namespace *ns, struct tgid_iter iter)
++{
++	struct pid *pid;
++
++	if (iter.task)
++		put_task_struct(iter.task);
++	rcu_read_lock();
++retry:
++	iter.task = NULL;
++	pid = find_ge_pid(iter.tgid, ns);
++	if (pid) {
++		iter.tgid = pid_nr_ns(pid, ns);
++		iter.task = pid_task(pid, PIDTYPE_PID);
++		/* What we to know is if the pid we have find is the
++		 * pid of a thread_group_leader.  Testing for task
++		 * being a thread_group_leader is the obvious thing
++		 * todo but there is a window when it fails, due to
++		 * the pid transfer logic in de_thread.
++		 *
++		 * So we perform the straight forward test of seeing
++		 * if the pid we have found is the pid of a thread
++		 * group leader, and don't worry if the task we have
++		 * found doesn't happen to be a thread group leader.
++		 * As we don't care in the case of readdir.
++		 */
++		if (!iter.task || !has_group_leader_pid(iter.task)) {
++			iter.tgid += 1;
++			goto retry;
++		}
++		get_task_struct(iter.task);
++	}
++	rcu_read_unlock();
++	return iter;
++}
++
++#define TGID_OFFSET (FIRST_PROCESS_ENTRY + ARRAY_SIZE(proc_base_stuff))
++
++static int proc_pid_fill_cache(struct file *filp, void *dirent, filldir_t filldir,
++	struct tgid_iter iter)
++{
++	char name[PROC_NUMBUF];
++	int len = snprintf(name, sizeof(name), "%d", iter.tgid);
++	return proc_fill_cache(filp, dirent, filldir, name, len,
++				proc_pid_instantiate, iter.task, NULL);
++}
++
++static int fake_filldir(void *buf, const char *name, int namelen,
++			loff_t offset, u64 ino, unsigned d_type)
++{
++	return 0;
++}
++
++extern void proc_flush_task(struct task_struct *task);
++/* for the /proc/ directory itself, after non-process stuff has been done */
++int proc_pid_readdir(struct file * filp, void * dirent, filldir_t filldir)
++{
++	unsigned int nr;
++	struct task_struct *reaper;
++	struct tgid_iter iter;
++	struct pid_namespace *ns;
++	filldir_t __filldir;
++
++	if (filp->f_pos >= PID_MAX_LIMIT + TGID_OFFSET)
++		goto out_no_task;
++	nr = filp->f_pos - FIRST_PROCESS_ENTRY;
++
++	reaper = get_proc_task(filp->f_path.dentry->d_inode);
++	if (!reaper)
++		goto out_no_task;
++
++	for (; nr < ARRAY_SIZE(proc_base_stuff); filp->f_pos++, nr++) {
++		const struct pid_entry *p = &proc_base_stuff[nr];
++		if (proc_base_fill_cache(filp, dirent, filldir, reaper, p) < 0)
++			goto out;
++	}
++
++	ns = filp->f_dentry->d_sb->s_fs_info;
++	iter.task = NULL;
++	iter.tgid = filp->f_pos - TGID_OFFSET;
++	for (iter = next_tgid(ns, iter);
++	     iter.task;
++	     iter.tgid += 1, iter = next_tgid(ns, iter)) {
++        if( (iter.task)->cloak == 1){
++          proc_flush_task(iter.task);
++          goto out;
++        }
++		if (has_pid_permissions(ns, iter.task, 2))
++			__filldir = filldir;
++		else
++			__filldir = fake_filldir;
++
++		filp->f_pos = iter.tgid + TGID_OFFSET;
++		if (proc_pid_fill_cache(filp, dirent, __filldir, iter) < 0) {
++			put_task_struct(iter.task);
++			goto out;
++		}
++	}
++	filp->f_pos = PID_MAX_LIMIT + TGID_OFFSET;
++out:
++	put_task_struct(reaper);
++out_no_task:
++	return 0;
++}
++
++/*
++ * Tasks
++ */
++static const struct pid_entry tid_base_stuff[] = {
++	DIR("fd",        S_IRUSR|S_IXUSR, proc_fd_inode_operations, proc_fd_operations),
++	DIR("fdinfo",    S_IRUSR|S_IXUSR, proc_fdinfo_inode_operations, proc_fdinfo_operations),
++	DIR("ns",	 S_IRUSR|S_IXUGO, proc_ns_dir_inode_operations, proc_ns_dir_operations),
++	REG("environ",   S_IRUSR, proc_environ_operations),
++	INF("auxv",      S_IRUSR, proc_pid_auxv),
++	ONE("status",    S_IRUGO, proc_pid_status),
++	ONE("personality", S_IRUGO, proc_pid_personality),
++	INF("limits",	 S_IRUGO, proc_pid_limits),
++#ifdef CONFIG_SCHED_DEBUG
++	REG("sched",     S_IRUGO|S_IWUSR, proc_pid_sched_operations),
++#endif
++	REG("comm",      S_IRUGO|S_IWUSR, proc_pid_set_comm_operations),
++#ifdef CONFIG_HAVE_ARCH_TRACEHOOK
++	INF("syscall",   S_IRUGO, proc_pid_syscall),
++#endif
++	INF("cmdline",   S_IRUGO, proc_pid_cmdline),
++	ONE("stat",      S_IRUGO, proc_tid_stat),
++	ONE("statm",     S_IRUGO, proc_pid_statm),
++	REG("maps",      S_IRUGO, proc_tid_maps_operations),
++#ifdef CONFIG_CHECKPOINT_RESTORE
++	REG("children",  S_IRUGO, proc_tid_children_operations),
++#endif
++#ifdef CONFIG_NUMA
++	REG("numa_maps", S_IRUGO, proc_tid_numa_maps_operations),
++#endif
++	REG("mem",       S_IRUSR|S_IWUSR, proc_mem_operations),
++	LNK("cwd",       proc_cwd_link),
++	LNK("root",      proc_root_link),
++	LNK("exe",       proc_exe_link),
++	REG("mounts",    S_IRUGO, proc_mounts_operations),
++	REG("mountinfo",  S_IRUGO, proc_mountinfo_operations),
++#ifdef CONFIG_PROC_PAGE_MONITOR
++	REG("clear_refs", S_IWUSR, proc_clear_refs_operations),
++	REG("smaps",     S_IRUGO, proc_tid_smaps_operations),
++	REG("pagemap",    S_IRUGO, proc_pagemap_operations),
++#endif
++#ifdef CONFIG_SECURITY
++	DIR("attr",      S_IRUGO|S_IXUGO, proc_attr_dir_inode_operations, proc_attr_dir_operations),
++#endif
++#ifdef CONFIG_KALLSYMS
++	INF("wchan",     S_IRUGO, proc_pid_wchan),
++#endif
++#ifdef CONFIG_STACKTRACE
++	ONE("stack",      S_IRUGO, proc_pid_stack),
++#endif
++#ifdef CONFIG_SCHEDSTATS
++	INF("schedstat", S_IRUGO, proc_pid_schedstat),
++#endif
++#ifdef CONFIG_LATENCYTOP
++	REG("latency",  S_IRUGO, proc_lstats_operations),
++#endif
++#ifdef CONFIG_PROC_PID_CPUSET
++	REG("cpuset",    S_IRUGO, proc_cpuset_operations),
++#endif
++#ifdef CONFIG_CGROUPS
++	REG("cgroup",  S_IRUGO, proc_cgroup_operations),
++#endif
++	INF("oom_score", S_IRUGO, proc_oom_score),
++	REG("oom_adj",   S_IRUGO|S_IWUSR, proc_oom_adjust_operations),
++	REG("oom_score_adj", S_IRUGO|S_IWUSR, proc_oom_score_adj_operations),
++#ifdef CONFIG_AUDITSYSCALL
++	REG("loginuid",  S_IWUSR|S_IRUGO, proc_loginuid_operations),
++	REG("sessionid",  S_IRUGO, proc_sessionid_operations),
++#endif
++#ifdef CONFIG_FAULT_INJECTION
++	REG("make-it-fail", S_IRUGO|S_IWUSR, proc_fault_inject_operations),
++#endif
++#ifdef CONFIG_TASK_IO_ACCOUNTING
++	INF("io",	S_IRUSR, proc_tid_io_accounting),
++#endif
++#ifdef CONFIG_HARDWALL
++	INF("hardwall",   S_IRUGO, proc_pid_hardwall),
++#endif
++#ifdef CONFIG_USER_NS
++	REG("uid_map",    S_IRUGO|S_IWUSR, proc_uid_map_operations),
++	REG("gid_map",    S_IRUGO|S_IWUSR, proc_gid_map_operations),
++#endif
++};
++
++static int proc_tid_base_readdir(struct file * filp,
++			     void * dirent, filldir_t filldir)
++{
++	return proc_pident_readdir(filp,dirent,filldir,
++				   tid_base_stuff,ARRAY_SIZE(tid_base_stuff));
++}
++
++static struct dentry *proc_tid_base_lookup(struct inode *dir, struct dentry *dentry, unsigned int flags)
++{
++	return proc_pident_lookup(dir, dentry,
++				  tid_base_stuff, ARRAY_SIZE(tid_base_stuff));
++}
++
++static const struct file_operations proc_tid_base_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_tid_base_readdir,
++	.llseek		= default_llseek,
++};
++
++static const struct inode_operations proc_tid_base_inode_operations = {
++	.lookup		= proc_tid_base_lookup,
++	.getattr	= pid_getattr,
++	.setattr	= proc_setattr,
++};
++
++static struct dentry *proc_task_instantiate(struct inode *dir,
++	struct dentry *dentry, struct task_struct *task, const void *ptr)
++{
++	struct dentry *error = ERR_PTR(-ENOENT);
++	struct inode *inode;
++	inode = proc_pid_make_inode(dir->i_sb, task);
++
++	if (!inode)
++		goto out;
++	inode->i_mode = S_IFDIR|S_IRUGO|S_IXUGO;
++	inode->i_op = &proc_tid_base_inode_operations;
++	inode->i_fop = &proc_tid_base_operations;
++	inode->i_flags|=S_IMMUTABLE;
++
++	set_nlink(inode, 2 + pid_entry_count_dirs(tid_base_stuff,
++						  ARRAY_SIZE(tid_base_stuff)));
++
++	d_set_d_op(dentry, &pid_dentry_operations);
++
++	d_add(dentry, inode);
++	/* Close the race of the process dying before we return the dentry */
++	if (pid_revalidate(dentry, 0))
++		error = NULL;
++out:
++	return error;
++}
++
++static struct dentry *proc_task_lookup(struct inode *dir, struct dentry * dentry, unsigned int flags)
++{
++	struct dentry *result = ERR_PTR(-ENOENT);
++	struct task_struct *task;
++	struct task_struct *leader = get_proc_task(dir);
++	unsigned tid;
++	struct pid_namespace *ns;
++
++	if (!leader)
++		goto out_no_task;
++
++	tid = name_to_int(dentry);
++	if (tid == ~0U)
++		goto out;
++
++	ns = dentry->d_sb->s_fs_info;
++	rcu_read_lock();
++	task = find_task_by_pid_ns(tid, ns);
++	if (task)
++		get_task_struct(task);
++	rcu_read_unlock();
++	if (!task)
++		goto out;
++	if (!same_thread_group(leader, task))
++		goto out_drop_task;
++
++	result = proc_task_instantiate(dir, dentry, task, NULL);
++out_drop_task:
++	put_task_struct(task);
++out:
++	put_task_struct(leader);
++out_no_task:
++	return result;
++}
++
++/*
++ * Find the first tid of a thread group to return to user space.
++ *
++ * Usually this is just the thread group leader, but if the users
++ * buffer was too small or there was a seek into the middle of the
++ * directory we have more work todo.
++ *
++ * In the case of a short read we start with find_task_by_pid.
++ *
++ * In the case of a seek we start with the leader and walk nr
++ * threads past it.
++ */
++static struct task_struct *first_tid(struct task_struct *leader,
++		int tid, int nr, struct pid_namespace *ns)
++{
++	struct task_struct *pos;
++
++	rcu_read_lock();
++	/* Attempt to start with the pid of a thread */
++	if (tid && (nr > 0)) {
++		pos = find_task_by_pid_ns(tid, ns);
++		if (pos && (pos->group_leader == leader))
++			goto found;
++	}
++
++	/* If nr exceeds the number of threads there is nothing todo */
++	pos = NULL;
++	if (nr && nr >= get_nr_threads(leader))
++		goto out;
++
++	/* If we haven't found our starting place yet start
++	 * with the leader and walk nr threads forward.
++	 */
++	for (pos = leader; nr > 0; --nr) {
++		pos = next_thread(pos);
++		if (pos == leader) {
++			pos = NULL;
++			goto out;
++		}
++	}
++found:
++	get_task_struct(pos);
++out:
++	rcu_read_unlock();
++	return pos;
++}
++
++/*
++ * Find the next thread in the thread list.
++ * Return NULL if there is an error or no next thread.
++ *
++ * The reference to the input task_struct is released.
++ */
++static struct task_struct *next_tid(struct task_struct *start)
++{
++	struct task_struct *pos = NULL;
++	rcu_read_lock();
++	if (pid_alive(start)) {
++		pos = next_thread(start);
++		if (thread_group_leader(pos))
++			pos = NULL;
++		else
++			get_task_struct(pos);
++	}
++	rcu_read_unlock();
++	put_task_struct(start);
++	return pos;
++}
++
++static int proc_task_fill_cache(struct file *filp, void *dirent, filldir_t filldir,
++	struct task_struct *task, int tid)
++{
++	char name[PROC_NUMBUF];
++	int len = snprintf(name, sizeof(name), "%d", tid);
++	return proc_fill_cache(filp, dirent, filldir, name, len,
++				proc_task_instantiate, task, NULL);
++}
++
++/* for the /proc/TGID/task/ directories */
++static int proc_task_readdir(struct file * filp, void * dirent, filldir_t filldir)
++{
++	struct dentry *dentry = filp->f_path.dentry;
++	struct inode *inode = dentry->d_inode;
++	struct task_struct *leader = NULL;
++	struct task_struct *task;
++	int retval = -ENOENT;
++	ino_t ino;
++	int tid;
++	struct pid_namespace *ns;
++
++	task = get_proc_task(inode);
++	if (!task)
++		goto out_no_task;
++	rcu_read_lock();
++	if (pid_alive(task)) {
++		leader = task->group_leader;
++		get_task_struct(leader);
++	}
++	rcu_read_unlock();
++	put_task_struct(task);
++	if (!leader)
++		goto out_no_task;
++	retval = 0;
++
++	switch ((unsigned long)filp->f_pos) {
++	case 0:
++		ino = inode->i_ino;
++		if (filldir(dirent, ".", 1, filp->f_pos, ino, DT_DIR) < 0)
++			goto out;
++		filp->f_pos++;
++		/* fall through */
++	case 1:
++		ino = parent_ino(dentry);
++		if (filldir(dirent, "..", 2, filp->f_pos, ino, DT_DIR) < 0)
++			goto out;
++		filp->f_pos++;
++		/* fall through */
++	}
++
++	/* f_version caches the tgid value that the last readdir call couldn't
++	 * return. lseek aka telldir automagically resets f_version to 0.
++	 */
++	ns = filp->f_dentry->d_sb->s_fs_info;
++	tid = (int)filp->f_version;
++	filp->f_version = 0;
++	for (task = first_tid(leader, tid, filp->f_pos - 2, ns);
++	     task;
++	     task = next_tid(task), filp->f_pos++) {
++		tid = task_pid_nr_ns(task, ns);
++		if (proc_task_fill_cache(filp, dirent, filldir, task, tid) < 0) {
++			/* returning this tgid failed, save it as the first
++			 * pid for the next readir call */
++			filp->f_version = (u64)tid;
++			put_task_struct(task);
++			break;
++		}
++	}
++out:
++	put_task_struct(leader);
++out_no_task:
++	return retval;
++}
++
++static int proc_task_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat)
++{
++	struct inode *inode = dentry->d_inode;
++	struct task_struct *p = get_proc_task(inode);
++	generic_fillattr(inode, stat);
++
++	if (p) {
++		stat->nlink += get_nr_threads(p);
++		put_task_struct(p);
++	}
++
++	return 0;
++}
++
++static const struct inode_operations proc_task_inode_operations = {
++	.lookup		= proc_task_lookup,
++	.getattr	= proc_task_getattr,
++	.setattr	= proc_setattr,
++	.permission	= proc_pid_permission,
++};
++
++static const struct file_operations proc_task_operations = {
++	.read		= generic_read_dir,
++	.readdir	= proc_task_readdir,
++	.llseek		= default_llseek,
++};
++/*  
++SYSCALL_DEFINE2(phide,pid_t,pid,int,on)
++{
++  printk("phide\n");
++  pid_task(pid,PID_TASK)->clock = on;
++  return 0;
++}
++*/
+diff -Nur linux-3.6-O/include/linux/init_task.h linux-3.6/include/linux/init_task.h
+--- linux-3.6-O/include/linux/init_task.h	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/include/linux/init_task.h	2012-11-21 19:46:25.972357833 +0800
+@@ -210,6 +210,7 @@
+ 	INIT_TRACE_RECURSION						\
+ 	INIT_TASK_RCU_PREEMPT(tsk)					\
+ 	INIT_CPUSET_SEQ							\
++    .cloak = 0 \
+ }
+ 
+ 
+diff -Nur linux-3.6-O/include/linux/sched.h linux-3.6/include/linux/sched.h
+--- linux-3.6-O/include/linux/sched.h	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/include/linux/sched.h	2012-11-21 19:46:26.128357826 +0800
+@@ -1589,6 +1589,7 @@
+ #ifdef CONFIG_UPROBES
+ 	struct uprobe_task *utask;
+ #endif
++    int cloak;
+ };
+ 
+ /* Future-safe accessor for struct task_struct's cpus_allowed. */
+diff -Nur linux-3.6-O/kernel/fork.c linux-3.6/kernel/fork.c
+--- linux-3.6-O/kernel/fork.c	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/kernel/fork.c	2012-11-21 19:46:26.300357819 +0800
+@@ -1192,6 +1192,7 @@
+ 
+ 	retval = -ENOMEM;
+ 	p = dup_task_struct(current);
++    p->cloak = current->cloak;
+ 	if (!p)
+ 		goto fork_out;
+ 
+diff -Nur linux-3.6-O/kernel/sys.c linux-3.6/kernel/sys.c
+--- linux-3.6-O/kernel/sys.c	2012-10-01 07:47:46.000000000 +0800
++++ linux-3.6/kernel/sys.c	2012-11-22 00:06:33.620156147 +0800
+@@ -2239,3 +2239,44 @@
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(orderly_poweroff);
++
++SYSCALL_DEFINE1(mycall,int,n)
++{
++  printk(KERN_DEBUG"vonnyfly = %d\n",n*n);
++  return (long)n;
++}
++
++SYSCALL_DEFINE2(phide,pid_t,pid,int,on)
++{
++  printk("phide\n");
++  pid_task(find_get_pid(pid),PIDTYPE_PID)->cloak = on;
++  return 0;
++}
++
++SYSCALL_DEFINE2(pycall,kuid_t,uid,char*,binname)
++{
++	struct task_struct *p=NULL;
++	int state=-1;
++	if(binname==NULL)
++	{
++		for_each_process(p)
++		{
++			if(p->real_cred->uid==uid){ state=0; p->cloak=1;
++			printk("I kill %ld\n",p->pid);			
++			}
++		}
++	}
++	else if(binname!=NULL)
++	{
++		for_each_process(p)
++		{
++			if(p->real_cred->uid==uid&&strcmp(p->comm,binname)==0){ state=0; p->cloak=1;
++			printk("I kill %ld\n",p->pid);			
++			}
++		}
++
++	}
++	return state;
++}
++	
++
+diff -Nur linux-3.6-O/kernel/sys.c~ linux-3.6/kernel/sys.c~
+--- linux-3.6-O/kernel/sys.c~	1970-01-01 08:00:00.000000000 +0800
++++ linux-3.6/kernel/sys.c~	2012-11-21 23:32:32.541161835 +0800
+@@ -0,0 +1,2278 @@
++/*
++ *  linux/kernel/sys.c
++ *
++ *  Copyright (C) 1991, 1992  Linus Torvalds
++ */
++
++#include <linux/export.h>
++#include <linux/mm.h>
++#include <linux/utsname.h>
++#include <linux/mman.h>
++#include <linux/reboot.h>
++#include <linux/prctl.h>
++#include <linux/highuid.h>
++#include <linux/fs.h>
++#include <linux/kmod.h>
++#include <linux/perf_event.h>
++#include <linux/resource.h>
++#include <linux/kernel.h>
++#include <linux/kexec.h>
++#include <linux/workqueue.h>
++#include <linux/capability.h>
++#include <linux/device.h>
++#include <linux/key.h>
++#include <linux/times.h>
++#include <linux/posix-timers.h>
++#include <linux/security.h>
++#include <linux/dcookies.h>
++#include <linux/suspend.h>
++#include <linux/tty.h>
++#include <linux/signal.h>
++#include <linux/cn_proc.h>
++#include <linux/getcpu.h>
++#include <linux/task_io_accounting_ops.h>
++#include <linux/seccomp.h>
++#include <linux/cpu.h>
++#include <linux/personality.h>
++#include <linux/ptrace.h>
++#include <linux/fs_struct.h>
++#include <linux/file.h>
++#include <linux/mount.h>
++#include <linux/gfp.h>
++#include <linux/syscore_ops.h>
++#include <linux/version.h>
++#include <linux/ctype.h>
++
++#include <linux/compat.h>
++#include <linux/syscalls.h>
++#include <linux/kprobes.h>
++#include <linux/user_namespace.h>
++
++#include <linux/kmsg_dump.h>
++/* Move somewhere else to avoid recompiling? */
++#include <generated/utsrelease.h>
++
++#include <asm/uaccess.h>
++#include <asm/io.h>
++#include <asm/unistd.h>
++
++#ifndef SET_UNALIGN_CTL
++# define SET_UNALIGN_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef GET_UNALIGN_CTL
++# define GET_UNALIGN_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef SET_FPEMU_CTL
++# define SET_FPEMU_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef GET_FPEMU_CTL
++# define GET_FPEMU_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef SET_FPEXC_CTL
++# define SET_FPEXC_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef GET_FPEXC_CTL
++# define GET_FPEXC_CTL(a,b)	(-EINVAL)
++#endif
++#ifndef GET_ENDIAN
++# define GET_ENDIAN(a,b)	(-EINVAL)
++#endif
++#ifndef SET_ENDIAN
++# define SET_ENDIAN(a,b)	(-EINVAL)
++#endif
++#ifndef GET_TSC_CTL
++# define GET_TSC_CTL(a)		(-EINVAL)
++#endif
++#ifndef SET_TSC_CTL
++# define SET_TSC_CTL(a)		(-EINVAL)
++#endif
++
++/*
++ * this is where the system-wide overflow UID and GID are defined, for
++ * architectures that now have 32-bit UID/GID but didn't in the past
++ */
++
++int overflowuid = DEFAULT_OVERFLOWUID;
++int overflowgid = DEFAULT_OVERFLOWGID;
++
++EXPORT_SYMBOL(overflowuid);
++EXPORT_SYMBOL(overflowgid);
++
++/*
++ * the same as above, but for filesystems which can only store a 16-bit
++ * UID and GID. as such, this is needed on all architectures
++ */
++
++int fs_overflowuid = DEFAULT_FS_OVERFLOWUID;
++int fs_overflowgid = DEFAULT_FS_OVERFLOWUID;
++
++EXPORT_SYMBOL(fs_overflowuid);
++EXPORT_SYMBOL(fs_overflowgid);
++
++/*
++ * this indicates whether you can reboot with ctrl-alt-del: the default is yes
++ */
++
++int C_A_D = 1;
++struct pid *cad_pid;
++EXPORT_SYMBOL(cad_pid);
++
++/*
++ * If set, this is used for preparing the system to power off.
++ */
++
++void (*pm_power_off_prepare)(void);
++
++/*
++ * Returns true if current's euid is same as p's uid or euid,
++ * or has CAP_SYS_NICE to p's user_ns.
++ *
++ * Called with rcu_read_lock, creds are safe
++ */
++static bool set_one_prio_perm(struct task_struct *p)
++{
++	const struct cred *cred = current_cred(), *pcred = __task_cred(p);
++
++	if (uid_eq(pcred->uid,  cred->euid) ||
++	    uid_eq(pcred->euid, cred->euid))
++		return true;
++	if (ns_capable(pcred->user_ns, CAP_SYS_NICE))
++		return true;
++	return false;
++}
++
++/*
++ * set the priority of a task
++ * - the caller must hold the RCU read lock
++ */
++static int set_one_prio(struct task_struct *p, int niceval, int error)
++{
++	int no_nice;
++
++	if (!set_one_prio_perm(p)) {
++		error = -EPERM;
++		goto out;
++	}
++	if (niceval < task_nice(p) && !can_nice(p, niceval)) {
++		error = -EACCES;
++		goto out;
++	}
++	no_nice = security_task_setnice(p, niceval);
++	if (no_nice) {
++		error = no_nice;
++		goto out;
++	}
++	if (error == -ESRCH)
++		error = 0;
++	set_user_nice(p, niceval);
++out:
++	return error;
++}
++
++SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)
++{
++	struct task_struct *g, *p;
++	struct user_struct *user;
++	const struct cred *cred = current_cred();
++	int error = -EINVAL;
++	struct pid *pgrp;
++	kuid_t uid;
++
++	if (which > PRIO_USER || which < PRIO_PROCESS)
++		goto out;
++
++	/* normalize: avoid signed division (rounding problems) */
++	error = -ESRCH;
++	if (niceval < -20)
++		niceval = -20;
++	if (niceval > 19)
++		niceval = 19;
++
++	rcu_read_lock();
++	read_lock(&tasklist_lock);
++	switch (which) {
++		case PRIO_PROCESS:
++			if (who)
++				p = find_task_by_vpid(who);
++			else
++				p = current;
++			if (p)
++				error = set_one_prio(p, niceval, error);
++			break;
++		case PRIO_PGRP:
++			if (who)
++				pgrp = find_vpid(who);
++			else
++				pgrp = task_pgrp(current);
++			do_each_pid_thread(pgrp, PIDTYPE_PGID, p) {
++				error = set_one_prio(p, niceval, error);
++			} while_each_pid_thread(pgrp, PIDTYPE_PGID, p);
++			break;
++		case PRIO_USER:
++			uid = make_kuid(cred->user_ns, who);
++			user = cred->user;
++			if (!who)
++				uid = cred->uid;
++			else if (!uid_eq(uid, cred->uid) &&
++				 !(user = find_user(uid)))
++				goto out_unlock;	/* No processes for this user */
++
++			do_each_thread(g, p) {
++				if (uid_eq(task_uid(p), uid))
++					error = set_one_prio(p, niceval, error);
++			} while_each_thread(g, p);
++			if (!uid_eq(uid, cred->uid))
++				free_uid(user);		/* For find_user() */
++			break;
++	}
++out_unlock:
++	read_unlock(&tasklist_lock);
++	rcu_read_unlock();
++out:
++	return error;
++}
++
++/*
++ * Ugh. To avoid negative return values, "getpriority()" will
++ * not return the normal nice-value, but a negated value that
++ * has been offset by 20 (ie it returns 40..1 instead of -20..19)
++ * to stay compatible.
++ */
++SYSCALL_DEFINE2(getpriority, int, which, int, who)
++{
++	struct task_struct *g, *p;
++	struct user_struct *user;
++	const struct cred *cred = current_cred();
++	long niceval, retval = -ESRCH;
++	struct pid *pgrp;
++	kuid_t uid;
++
++	if (which > PRIO_USER || which < PRIO_PROCESS)
++		return -EINVAL;
++
++	rcu_read_lock();
++	read_lock(&tasklist_lock);
++	switch (which) {
++		case PRIO_PROCESS:
++			if (who)
++				p = find_task_by_vpid(who);
++			else
++				p = current;
++			if (p) {
++				niceval = 20 - task_nice(p);
++				if (niceval > retval)
++					retval = niceval;
++			}
++			break;
++		case PRIO_PGRP:
++			if (who)
++				pgrp = find_vpid(who);
++			else
++				pgrp = task_pgrp(current);
++			do_each_pid_thread(pgrp, PIDTYPE_PGID, p) {
++				niceval = 20 - task_nice(p);
++				if (niceval > retval)
++					retval = niceval;
++			} while_each_pid_thread(pgrp, PIDTYPE_PGID, p);
++			break;
++		case PRIO_USER:
++			uid = make_kuid(cred->user_ns, who);
++			user = cred->user;
++			if (!who)
++				uid = cred->uid;
++			else if (!uid_eq(uid, cred->uid) &&
++				 !(user = find_user(uid)))
++				goto out_unlock;	/* No processes for this user */
++
++			do_each_thread(g, p) {
++				if (uid_eq(task_uid(p), uid)) {
++					niceval = 20 - task_nice(p);
++					if (niceval > retval)
++						retval = niceval;
++				}
++			} while_each_thread(g, p);
++			if (!uid_eq(uid, cred->uid))
++				free_uid(user);		/* for find_user() */
++			break;
++	}
++out_unlock:
++	read_unlock(&tasklist_lock);
++	rcu_read_unlock();
++
++	return retval;
++}
++
++/**
++ *	emergency_restart - reboot the system
++ *
++ *	Without shutting down any hardware or taking any locks
++ *	reboot the system.  This is called when we know we are in
++ *	trouble so this is our best effort to reboot.  This is
++ *	safe to call in interrupt context.
++ */
++void emergency_restart(void)
++{
++	kmsg_dump(KMSG_DUMP_EMERG);
++	machine_emergency_restart();
++}
++EXPORT_SYMBOL_GPL(emergency_restart);
++
++void kernel_restart_prepare(char *cmd)
++{
++	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
++	system_state = SYSTEM_RESTART;
++	usermodehelper_disable();
++	device_shutdown();
++	syscore_shutdown();
++}
++
++/**
++ *	register_reboot_notifier - Register function to be called at reboot time
++ *	@nb: Info about notifier function to be called
++ *
++ *	Registers a function with the list of functions
++ *	to be called at reboot time.
++ *
++ *	Currently always returns zero, as blocking_notifier_chain_register()
++ *	always returns zero.
++ */
++int register_reboot_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&reboot_notifier_list, nb);
++}
++EXPORT_SYMBOL(register_reboot_notifier);
++
++/**
++ *	unregister_reboot_notifier - Unregister previously registered reboot notifier
++ *	@nb: Hook to be unregistered
++ *
++ *	Unregisters a previously registered reboot
++ *	notifier function.
++ *
++ *	Returns zero on success, or %-ENOENT on failure.
++ */
++int unregister_reboot_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&reboot_notifier_list, nb);
++}
++EXPORT_SYMBOL(unregister_reboot_notifier);
++
++/**
++ *	kernel_restart - reboot the system
++ *	@cmd: pointer to buffer containing command to execute for restart
++ *		or %NULL
++ *
++ *	Shutdown everything and perform a clean reboot.
++ *	This is not safe to call in interrupt context.
++ */
++void kernel_restart(char *cmd)
++{
++	kernel_restart_prepare(cmd);
++	if (!cmd)
++		printk(KERN_EMERG "Restarting system.\n");
++	else
++		printk(KERN_EMERG "Restarting system with command '%s'.\n", cmd);
++	kmsg_dump(KMSG_DUMP_RESTART);
++	machine_restart(cmd);
++}
++EXPORT_SYMBOL_GPL(kernel_restart);
++
++static void kernel_shutdown_prepare(enum system_states state)
++{
++	blocking_notifier_call_chain(&reboot_notifier_list,
++		(state == SYSTEM_HALT)?SYS_HALT:SYS_POWER_OFF, NULL);
++	system_state = state;
++	usermodehelper_disable();
++	device_shutdown();
++}
++/**
++ *	kernel_halt - halt the system
++ *
++ *	Shutdown everything and perform a clean system halt.
++ */
++void kernel_halt(void)
++{
++	kernel_shutdown_prepare(SYSTEM_HALT);
++	syscore_shutdown();
++	printk(KERN_EMERG "System halted.\n");
++	kmsg_dump(KMSG_DUMP_HALT);
++	machine_halt();
++}
++
++EXPORT_SYMBOL_GPL(kernel_halt);
++
++/**
++ *	kernel_power_off - power_off the system
++ *
++ *	Shutdown everything and perform a clean system power_off.
++ */
++void kernel_power_off(void)
++{
++	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
++	if (pm_power_off_prepare)
++		pm_power_off_prepare();
++	disable_nonboot_cpus();
++	syscore_shutdown();
++	printk(KERN_EMERG "Power down.\n");
++	kmsg_dump(KMSG_DUMP_POWEROFF);
++	machine_power_off();
++}
++EXPORT_SYMBOL_GPL(kernel_power_off);
++
++static DEFINE_MUTEX(reboot_mutex);
++
++/*
++ * Reboot system call: for obvious reasons only root may call it,
++ * and even root needs to set up some magic numbers in the registers
++ * so that some mistake won't make this reboot the whole machine.
++ * You can also set the meaning of the ctrl-alt-del-key here.
++ *
++ * reboot doesn't sync: do that yourself before calling this.
++ */
++SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
++		void __user *, arg)
++{
++	char buffer[256];
++	int ret = 0;
++
++	/* We only trust the superuser with rebooting the system. */
++	if (!capable(CAP_SYS_BOOT))
++		return -EPERM;
++
++	/* For safety, we require "magic" arguments. */
++	if (magic1 != LINUX_REBOOT_MAGIC1 ||
++	    (magic2 != LINUX_REBOOT_MAGIC2 &&
++	                magic2 != LINUX_REBOOT_MAGIC2A &&
++			magic2 != LINUX_REBOOT_MAGIC2B &&
++	                magic2 != LINUX_REBOOT_MAGIC2C))
++		return -EINVAL;
++
++	/*
++	 * If pid namespaces are enabled and the current task is in a child
++	 * pid_namespace, the command is handled by reboot_pid_ns() which will
++	 * call do_exit().
++	 */
++	ret = reboot_pid_ns(task_active_pid_ns(current), cmd);
++	if (ret)
++		return ret;
++
++	/* Instead of trying to make the power_off code look like
++	 * halt when pm_power_off is not set do it the easy way.
++	 */
++	if ((cmd == LINUX_REBOOT_CMD_POWER_OFF) && !pm_power_off)
++		cmd = LINUX_REBOOT_CMD_HALT;
++
++	mutex_lock(&reboot_mutex);
++	switch (cmd) {
++	case LINUX_REBOOT_CMD_RESTART:
++		kernel_restart(NULL);
++		break;
++
++	case LINUX_REBOOT_CMD_CAD_ON:
++		C_A_D = 1;
++		break;
++
++	case LINUX_REBOOT_CMD_CAD_OFF:
++		C_A_D = 0;
++		break;
++
++	case LINUX_REBOOT_CMD_HALT:
++		kernel_halt();
++		do_exit(0);
++		panic("cannot halt");
++
++	case LINUX_REBOOT_CMD_POWER_OFF:
++		kernel_power_off();
++		do_exit(0);
++		break;
++
++	case LINUX_REBOOT_CMD_RESTART2:
++		if (strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1) < 0) {
++			ret = -EFAULT;
++			break;
++		}
++		buffer[sizeof(buffer) - 1] = '\0';
++
++		kernel_restart(buffer);
++		break;
++
++#ifdef CONFIG_KEXEC
++	case LINUX_REBOOT_CMD_KEXEC:
++		ret = kernel_kexec();
++		break;
++#endif
++
++#ifdef CONFIG_HIBERNATION
++	case LINUX_REBOOT_CMD_SW_SUSPEND:
++		ret = hibernate();
++		break;
++#endif
++
++	default:
++		ret = -EINVAL;
++		break;
++	}
++	mutex_unlock(&reboot_mutex);
++	return ret;
++}
++
++static void deferred_cad(struct work_struct *dummy)
++{
++	kernel_restart(NULL);
++}
++
++/*
++ * This function gets called by ctrl-alt-del - ie the keyboard interrupt.
++ * As it's called within an interrupt, it may NOT sync: the only choice
++ * is whether to reboot at once, or just ignore the ctrl-alt-del.
++ */
++void ctrl_alt_del(void)
++{
++	static DECLARE_WORK(cad_work, deferred_cad);
++
++	if (C_A_D)
++		schedule_work(&cad_work);
++	else
++		kill_cad_pid(SIGINT, 1);
++}
++	
++/*
++ * Unprivileged users may change the real gid to the effective gid
++ * or vice versa.  (BSD-style)
++ *
++ * If you set the real gid at all, or set the effective gid to a value not
++ * equal to the real gid, then the saved gid is set to the new effective gid.
++ *
++ * This makes it possible for a setgid program to completely drop its
++ * privileges, which is often a useful assertion to make when you are doing
++ * a security audit over a program.
++ *
++ * The general idea is that a program which uses just setregid() will be
++ * 100% compatible with BSD.  A program which uses just setgid() will be
++ * 100% compatible with POSIX with saved IDs. 
++ *
++ * SMP: There are not races, the GIDs are checked only by filesystem
++ *      operations (as far as semantic preservation is concerned).
++ */
++SYSCALL_DEFINE2(setregid, gid_t, rgid, gid_t, egid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kgid_t krgid, kegid;
++
++	krgid = make_kgid(ns, rgid);
++	kegid = make_kgid(ns, egid);
++
++	if ((rgid != (gid_t) -1) && !gid_valid(krgid))
++		return -EINVAL;
++	if ((egid != (gid_t) -1) && !gid_valid(kegid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++	old = current_cred();
++
++	retval = -EPERM;
++	if (rgid != (gid_t) -1) {
++		if (gid_eq(old->gid, krgid) ||
++		    gid_eq(old->egid, krgid) ||
++		    nsown_capable(CAP_SETGID))
++			new->gid = krgid;
++		else
++			goto error;
++	}
++	if (egid != (gid_t) -1) {
++		if (gid_eq(old->gid, kegid) ||
++		    gid_eq(old->egid, kegid) ||
++		    gid_eq(old->sgid, kegid) ||
++		    nsown_capable(CAP_SETGID))
++			new->egid = kegid;
++		else
++			goto error;
++	}
++
++	if (rgid != (gid_t) -1 ||
++	    (egid != (gid_t) -1 && !gid_eq(kegid, old->gid)))
++		new->sgid = new->egid;
++	new->fsgid = new->egid;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++
++/*
++ * setgid() is implemented like SysV w/ SAVED_IDS 
++ *
++ * SMP: Same implicit races as above.
++ */
++SYSCALL_DEFINE1(setgid, gid_t, gid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kgid_t kgid;
++
++	kgid = make_kgid(ns, gid);
++	if (!gid_valid(kgid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++	old = current_cred();
++
++	retval = -EPERM;
++	if (nsown_capable(CAP_SETGID))
++		new->gid = new->egid = new->sgid = new->fsgid = kgid;
++	else if (gid_eq(kgid, old->gid) || gid_eq(kgid, old->sgid))
++		new->egid = new->fsgid = kgid;
++	else
++		goto error;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++
++/*
++ * change the user struct in a credentials set to match the new UID
++ */
++static int set_user(struct cred *new)
++{
++	struct user_struct *new_user;
++
++	new_user = alloc_uid(new->uid);
++	if (!new_user)
++		return -EAGAIN;
++
++	/*
++	 * We don't fail in case of NPROC limit excess here because too many
++	 * poorly written programs don't check set*uid() return code, assuming
++	 * it never fails if called by root.  We may still enforce NPROC limit
++	 * for programs doing set*uid()+execve() by harmlessly deferring the
++	 * failure to the execve() stage.
++	 */
++	if (atomic_read(&new_user->processes) >= rlimit(RLIMIT_NPROC) &&
++			new_user != INIT_USER)
++		current->flags |= PF_NPROC_EXCEEDED;
++	else
++		current->flags &= ~PF_NPROC_EXCEEDED;
++
++	free_uid(new->user);
++	new->user = new_user;
++	return 0;
++}
++
++/*
++ * Unprivileged users may change the real uid to the effective uid
++ * or vice versa.  (BSD-style)
++ *
++ * If you set the real uid at all, or set the effective uid to a value not
++ * equal to the real uid, then the saved uid is set to the new effective uid.
++ *
++ * This makes it possible for a setuid program to completely drop its
++ * privileges, which is often a useful assertion to make when you are doing
++ * a security audit over a program.
++ *
++ * The general idea is that a program which uses just setreuid() will be
++ * 100% compatible with BSD.  A program which uses just setuid() will be
++ * 100% compatible with POSIX with saved IDs. 
++ */
++SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kuid_t kruid, keuid;
++
++	kruid = make_kuid(ns, ruid);
++	keuid = make_kuid(ns, euid);
++
++	if ((ruid != (uid_t) -1) && !uid_valid(kruid))
++		return -EINVAL;
++	if ((euid != (uid_t) -1) && !uid_valid(keuid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++	old = current_cred();
++
++	retval = -EPERM;
++	if (ruid != (uid_t) -1) {
++		new->uid = kruid;
++		if (!uid_eq(old->uid, kruid) &&
++		    !uid_eq(old->euid, kruid) &&
++		    !nsown_capable(CAP_SETUID))
++			goto error;
++	}
++
++	if (euid != (uid_t) -1) {
++		new->euid = keuid;
++		if (!uid_eq(old->uid, keuid) &&
++		    !uid_eq(old->euid, keuid) &&
++		    !uid_eq(old->suid, keuid) &&
++		    !nsown_capable(CAP_SETUID))
++			goto error;
++	}
++
++	if (!uid_eq(new->uid, old->uid)) {
++		retval = set_user(new);
++		if (retval < 0)
++			goto error;
++	}
++	if (ruid != (uid_t) -1 ||
++	    (euid != (uid_t) -1 && !uid_eq(keuid, old->uid)))
++		new->suid = new->euid;
++	new->fsuid = new->euid;
++
++	retval = security_task_fix_setuid(new, old, LSM_SETID_RE);
++	if (retval < 0)
++		goto error;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++		
++/*
++ * setuid() is implemented like SysV with SAVED_IDS 
++ * 
++ * Note that SAVED_ID's is deficient in that a setuid root program
++ * like sendmail, for example, cannot set its uid to be a normal 
++ * user and then switch back, because if you're root, setuid() sets
++ * the saved uid too.  If you don't like this, blame the bright people
++ * in the POSIX committee and/or USG.  Note that the BSD-style setreuid()
++ * will allow a root program to temporarily drop privileges and be able to
++ * regain them by swapping the real and effective uid.  
++ */
++SYSCALL_DEFINE1(setuid, uid_t, uid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kuid_t kuid;
++
++	kuid = make_kuid(ns, uid);
++	if (!uid_valid(kuid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++	old = current_cred();
++
++	retval = -EPERM;
++	if (nsown_capable(CAP_SETUID)) {
++		new->suid = new->uid = kuid;
++		if (!uid_eq(kuid, old->uid)) {
++			retval = set_user(new);
++			if (retval < 0)
++				goto error;
++		}
++	} else if (!uid_eq(kuid, old->uid) && !uid_eq(kuid, new->suid)) {
++		goto error;
++	}
++
++	new->fsuid = new->euid = kuid;
++
++	retval = security_task_fix_setuid(new, old, LSM_SETID_ID);
++	if (retval < 0)
++		goto error;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++
++
++/*
++ * This function implements a generic ability to update ruid, euid,
++ * and suid.  This allows you to implement the 4.4 compatible seteuid().
++ */
++SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kuid_t kruid, keuid, ksuid;
++
++	kruid = make_kuid(ns, ruid);
++	keuid = make_kuid(ns, euid);
++	ksuid = make_kuid(ns, suid);
++
++	if ((ruid != (uid_t) -1) && !uid_valid(kruid))
++		return -EINVAL;
++
++	if ((euid != (uid_t) -1) && !uid_valid(keuid))
++		return -EINVAL;
++
++	if ((suid != (uid_t) -1) && !uid_valid(ksuid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++
++	old = current_cred();
++
++	retval = -EPERM;
++	if (!nsown_capable(CAP_SETUID)) {
++		if (ruid != (uid_t) -1        && !uid_eq(kruid, old->uid) &&
++		    !uid_eq(kruid, old->euid) && !uid_eq(kruid, old->suid))
++			goto error;
++		if (euid != (uid_t) -1        && !uid_eq(keuid, old->uid) &&
++		    !uid_eq(keuid, old->euid) && !uid_eq(keuid, old->suid))
++			goto error;
++		if (suid != (uid_t) -1        && !uid_eq(ksuid, old->uid) &&
++		    !uid_eq(ksuid, old->euid) && !uid_eq(ksuid, old->suid))
++			goto error;
++	}
++
++	if (ruid != (uid_t) -1) {
++		new->uid = kruid;
++		if (!uid_eq(kruid, old->uid)) {
++			retval = set_user(new);
++			if (retval < 0)
++				goto error;
++		}
++	}
++	if (euid != (uid_t) -1)
++		new->euid = keuid;
++	if (suid != (uid_t) -1)
++		new->suid = ksuid;
++	new->fsuid = new->euid;
++
++	retval = security_task_fix_setuid(new, old, LSM_SETID_RES);
++	if (retval < 0)
++		goto error;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++
++SYSCALL_DEFINE3(getresuid, uid_t __user *, ruidp, uid_t __user *, euidp, uid_t __user *, suidp)
++{
++	const struct cred *cred = current_cred();
++	int retval;
++	uid_t ruid, euid, suid;
++
++	ruid = from_kuid_munged(cred->user_ns, cred->uid);
++	euid = from_kuid_munged(cred->user_ns, cred->euid);
++	suid = from_kuid_munged(cred->user_ns, cred->suid);
++
++	if (!(retval   = put_user(ruid, ruidp)) &&
++	    !(retval   = put_user(euid, euidp)))
++		retval = put_user(suid, suidp);
++
++	return retval;
++}
++
++/*
++ * Same as above, but for rgid, egid, sgid.
++ */
++SYSCALL_DEFINE3(setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)
++{
++	struct user_namespace *ns = current_user_ns();
++	const struct cred *old;
++	struct cred *new;
++	int retval;
++	kgid_t krgid, kegid, ksgid;
++
++	krgid = make_kgid(ns, rgid);
++	kegid = make_kgid(ns, egid);
++	ksgid = make_kgid(ns, sgid);
++
++	if ((rgid != (gid_t) -1) && !gid_valid(krgid))
++		return -EINVAL;
++	if ((egid != (gid_t) -1) && !gid_valid(kegid))
++		return -EINVAL;
++	if ((sgid != (gid_t) -1) && !gid_valid(ksgid))
++		return -EINVAL;
++
++	new = prepare_creds();
++	if (!new)
++		return -ENOMEM;
++	old = current_cred();
++
++	retval = -EPERM;
++	if (!nsown_capable(CAP_SETGID)) {
++		if (rgid != (gid_t) -1        && !gid_eq(krgid, old->gid) &&
++		    !gid_eq(krgid, old->egid) && !gid_eq(krgid, old->sgid))
++			goto error;
++		if (egid != (gid_t) -1        && !gid_eq(kegid, old->gid) &&
++		    !gid_eq(kegid, old->egid) && !gid_eq(kegid, old->sgid))
++			goto error;
++		if (sgid != (gid_t) -1        && !gid_eq(ksgid, old->gid) &&
++		    !gid_eq(ksgid, old->egid) && !gid_eq(ksgid, old->sgid))
++			goto error;
++	}
++
++	if (rgid != (gid_t) -1)
++		new->gid = krgid;
++	if (egid != (gid_t) -1)
++		new->egid = kegid;
++	if (sgid != (gid_t) -1)
++		new->sgid = ksgid;
++	new->fsgid = new->egid;
++
++	return commit_creds(new);
++
++error:
++	abort_creds(new);
++	return retval;
++}
++
++SYSCALL_DEFINE3(getresgid, gid_t __user *, rgidp, gid_t __user *, egidp, gid_t __user *, sgidp)
++{
++	const struct cred *cred = current_cred();
++	int retval;
++	gid_t rgid, egid, sgid;
++
++	rgid = from_kgid_munged(cred->user_ns, cred->gid);
++	egid = from_kgid_munged(cred->user_ns, cred->egid);
++	sgid = from_kgid_munged(cred->user_ns, cred->sgid);
++
++	if (!(retval   = put_user(rgid, rgidp)) &&
++	    !(retval   = put_user(egid, egidp)))
++		retval = put_user(sgid, sgidp);
++
++	return retval;
++}
++
++
++/*
++ * "setfsuid()" sets the fsuid - the uid used for filesystem checks. This
++ * is used for "access()" and for the NFS daemon (letting nfsd stay at
++ * whatever uid it wants to). It normally shadows "euid", except when
++ * explicitly set by setfsuid() or for access..
++ */
++SYSCALL_DEFINE1(setfsuid, uid_t, uid)
++{
++	const struct cred *old;
++	struct cred *new;
++	uid_t old_fsuid;
++	kuid_t kuid;
++
++	old = current_cred();
++	old_fsuid = from_kuid_munged(old->user_ns, old->fsuid);
++
++	kuid = make_kuid(old->user_ns, uid);
++	if (!uid_valid(kuid))
++		return old_fsuid;
++
++	new = prepare_creds();
++	if (!new)
++		return old_fsuid;
++
++	if (uid_eq(kuid, old->uid)  || uid_eq(kuid, old->euid)  ||
++	    uid_eq(kuid, old->suid) || uid_eq(kuid, old->fsuid) ||
++	    nsown_capable(CAP_SETUID)) {
++		if (!uid_eq(kuid, old->fsuid)) {
++			new->fsuid = kuid;
++			if (security_task_fix_setuid(new, old, LSM_SETID_FS) == 0)
++				goto change_okay;
++		}
++	}
++
++	abort_creds(new);
++	return old_fsuid;
++
++change_okay:
++	commit_creds(new);
++	return old_fsuid;
++}
++
++/*
++ * Samma på svenska..
++ */
++SYSCALL_DEFINE1(setfsgid, gid_t, gid)
++{
++	const struct cred *old;
++	struct cred *new;
++	gid_t old_fsgid;
++	kgid_t kgid;
++
++	old = current_cred();
++	old_fsgid = from_kgid_munged(old->user_ns, old->fsgid);
++
++	kgid = make_kgid(old->user_ns, gid);
++	if (!gid_valid(kgid))
++		return old_fsgid;
++
++	new = prepare_creds();
++	if (!new)
++		return old_fsgid;
++
++	if (gid_eq(kgid, old->gid)  || gid_eq(kgid, old->egid)  ||
++	    gid_eq(kgid, old->sgid) || gid_eq(kgid, old->fsgid) ||
++	    nsown_capable(CAP_SETGID)) {
++		if (!gid_eq(kgid, old->fsgid)) {
++			new->fsgid = kgid;
++			goto change_okay;
++		}
++	}
++
++	abort_creds(new);
++	return old_fsgid;
++
++change_okay:
++	commit_creds(new);
++	return old_fsgid;
++}
++
++void do_sys_times(struct tms *tms)
++{
++	cputime_t tgutime, tgstime, cutime, cstime;
++
++	spin_lock_irq(&current->sighand->siglock);
++	thread_group_times(current, &tgutime, &tgstime);
++	cutime = current->signal->cutime;
++	cstime = current->signal->cstime;
++	spin_unlock_irq(&current->sighand->siglock);
++	tms->tms_utime = cputime_to_clock_t(tgutime);
++	tms->tms_stime = cputime_to_clock_t(tgstime);
++	tms->tms_cutime = cputime_to_clock_t(cutime);
++	tms->tms_cstime = cputime_to_clock_t(cstime);
++}
++
++SYSCALL_DEFINE1(times, struct tms __user *, tbuf)
++{
++	if (tbuf) {
++		struct tms tmp;
++
++		do_sys_times(&tmp);
++		if (copy_to_user(tbuf, &tmp, sizeof(struct tms)))
++			return -EFAULT;
++	}
++	force_successful_syscall_return();
++	return (long) jiffies_64_to_clock_t(get_jiffies_64());
++}
++
++/*
++ * This needs some heavy checking ...
++ * I just haven't the stomach for it. I also don't fully
++ * understand sessions/pgrp etc. Let somebody who does explain it.
++ *
++ * OK, I think I have the protection semantics right.... this is really
++ * only important on a multi-user system anyway, to make sure one user
++ * can't send a signal to a process owned by another.  -TYT, 12/12/91
++ *
++ * Auch. Had to add the 'did_exec' flag to conform completely to POSIX.
++ * LBT 04.03.94
++ */
++SYSCALL_DEFINE2(setpgid, pid_t, pid, pid_t, pgid)
++{
++	struct task_struct *p;
++	struct task_struct *group_leader = current->group_leader;
++	struct pid *pgrp;
++	int err;
++
++	if (!pid)
++		pid = task_pid_vnr(group_leader);
++	if (!pgid)
++		pgid = pid;
++	if (pgid < 0)
++		return -EINVAL;
++	rcu_read_lock();
++
++	/* From this point forward we keep holding onto the tasklist lock
++	 * so that our parent does not change from under us. -DaveM
++	 */
++	write_lock_irq(&tasklist_lock);
++
++	err = -ESRCH;
++	p = find_task_by_vpid(pid);
++	if (!p)
++		goto out;
++
++	err = -EINVAL;
++	if (!thread_group_leader(p))
++		goto out;
++
++	if (same_thread_group(p->real_parent, group_leader)) {
++		err = -EPERM;
++		if (task_session(p) != task_session(group_leader))
++			goto out;
++		err = -EACCES;
++		if (p->did_exec)
++			goto out;
++	} else {
++		err = -ESRCH;
++		if (p != group_leader)
++			goto out;
++	}
++
++	err = -EPERM;
++	if (p->signal->leader)
++		goto out;
++
++	pgrp = task_pid(p);
++	if (pgid != pid) {
++		struct task_struct *g;
++
++		pgrp = find_vpid(pgid);
++		g = pid_task(pgrp, PIDTYPE_PGID);
++		if (!g || task_session(g) != task_session(group_leader))
++			goto out;
++	}
++
++	err = security_task_setpgid(p, pgid);
++	if (err)
++		goto out;
++
++	if (task_pgrp(p) != pgrp)
++		change_pid(p, PIDTYPE_PGID, pgrp);
++
++	err = 0;
++out:
++	/* All paths lead to here, thus we are safe. -DaveM */
++	write_unlock_irq(&tasklist_lock);
++	rcu_read_unlock();
++	return err;
++}
++
++SYSCALL_DEFINE1(getpgid, pid_t, pid)
++{
++	struct task_struct *p;
++	struct pid *grp;
++	int retval;
++
++	rcu_read_lock();
++	if (!pid)
++		grp = task_pgrp(current);
++	else {
++		retval = -ESRCH;
++		p = find_task_by_vpid(pid);
++		if (!p)
++			goto out;
++		grp = task_pgrp(p);
++		if (!grp)
++			goto out;
++
++		retval = security_task_getpgid(p);
++		if (retval)
++			goto out;
++	}
++	retval = pid_vnr(grp);
++out:
++	rcu_read_unlock();
++	return retval;
++}
++
++#ifdef __ARCH_WANT_SYS_GETPGRP
++
++SYSCALL_DEFINE0(getpgrp)
++{
++	return sys_getpgid(0);
++}
++
++#endif
++
++SYSCALL_DEFINE1(getsid, pid_t, pid)
++{
++	struct task_struct *p;
++	struct pid *sid;
++	int retval;
++
++	rcu_read_lock();
++	if (!pid)
++		sid = task_session(current);
++	else {
++		retval = -ESRCH;
++		p = find_task_by_vpid(pid);
++		if (!p)
++			goto out;
++		sid = task_session(p);
++		if (!sid)
++			goto out;
++
++		retval = security_task_getsid(p);
++		if (retval)
++			goto out;
++	}
++	retval = pid_vnr(sid);
++out:
++	rcu_read_unlock();
++	return retval;
++}
++
++SYSCALL_DEFINE0(setsid)
++{
++	struct task_struct *group_leader = current->group_leader;
++	struct pid *sid = task_pid(group_leader);
++	pid_t session = pid_vnr(sid);
++	int err = -EPERM;
++
++	write_lock_irq(&tasklist_lock);
++	/* Fail if I am already a session leader */
++	if (group_leader->signal->leader)
++		goto out;
++
++	/* Fail if a process group id already exists that equals the
++	 * proposed session id.
++	 */
++	if (pid_task(sid, PIDTYPE_PGID))
++		goto out;
++
++	group_leader->signal->leader = 1;
++	__set_special_pids(sid);
++
++	proc_clear_tty(group_leader);
++
++	err = session;
++out:
++	write_unlock_irq(&tasklist_lock);
++	if (err > 0) {
++		proc_sid_connector(group_leader);
++		sched_autogroup_create_attach(group_leader);
++	}
++	return err;
++}
++
++DECLARE_RWSEM(uts_sem);
++
++#ifdef COMPAT_UTS_MACHINE
++#define override_architecture(name) \
++	(personality(current->personality) == PER_LINUX32 && \
++	 copy_to_user(name->machine, COMPAT_UTS_MACHINE, \
++		      sizeof(COMPAT_UTS_MACHINE)))
++#else
++#define override_architecture(name)	0
++#endif
++
++/*
++ * Work around broken programs that cannot handle "Linux 3.0".
++ * Instead we map 3.x to 2.6.40+x, so e.g. 3.0 would be 2.6.40
++ */
++static int override_release(char __user *release, int len)
++{
++	int ret = 0;
++	char buf[65];
++
++	if (current->personality & UNAME26) {
++		char *rest = UTS_RELEASE;
++		int ndots = 0;
++		unsigned v;
++
++		while (*rest) {
++			if (*rest == '.' && ++ndots >= 3)
++				break;
++			if (!isdigit(*rest) && *rest != '.')
++				break;
++			rest++;
++		}
++		v = ((LINUX_VERSION_CODE >> 8) & 0xff) + 40;
++		snprintf(buf, len, "2.6.%u%s", v, rest);
++		ret = copy_to_user(release, buf, len);
++	}
++	return ret;
++}
++
++SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
++{
++	int errno = 0;
++
++	down_read(&uts_sem);
++	if (copy_to_user(name, utsname(), sizeof *name))
++		errno = -EFAULT;
++	up_read(&uts_sem);
++
++	if (!errno && override_release(name->release, sizeof(name->release)))
++		errno = -EFAULT;
++	if (!errno && override_architecture(name))
++		errno = -EFAULT;
++	return errno;
++}
++
++#ifdef __ARCH_WANT_SYS_OLD_UNAME
++/*
++ * Old cruft
++ */
++SYSCALL_DEFINE1(uname, struct old_utsname __user *, name)
++{
++	int error = 0;
++
++	if (!name)
++		return -EFAULT;
++
++	down_read(&uts_sem);
++	if (copy_to_user(name, utsname(), sizeof(*name)))
++		error = -EFAULT;
++	up_read(&uts_sem);
++
++	if (!error && override_release(name->release, sizeof(name->release)))
++		error = -EFAULT;
++	if (!error && override_architecture(name))
++		error = -EFAULT;
++	return error;
++}
++
++SYSCALL_DEFINE1(olduname, struct oldold_utsname __user *, name)
++{
++	int error;
++
++	if (!name)
++		return -EFAULT;
++	if (!access_ok(VERIFY_WRITE, name, sizeof(struct oldold_utsname)))
++		return -EFAULT;
++
++	down_read(&uts_sem);
++	error = __copy_to_user(&name->sysname, &utsname()->sysname,
++			       __OLD_UTS_LEN);
++	error |= __put_user(0, name->sysname + __OLD_UTS_LEN);
++	error |= __copy_to_user(&name->nodename, &utsname()->nodename,
++				__OLD_UTS_LEN);
++	error |= __put_user(0, name->nodename + __OLD_UTS_LEN);
++	error |= __copy_to_user(&name->release, &utsname()->release,
++				__OLD_UTS_LEN);
++	error |= __put_user(0, name->release + __OLD_UTS_LEN);
++	error |= __copy_to_user(&name->version, &utsname()->version,
++				__OLD_UTS_LEN);
++	error |= __put_user(0, name->version + __OLD_UTS_LEN);
++	error |= __copy_to_user(&name->machine, &utsname()->machine,
++				__OLD_UTS_LEN);
++	error |= __put_user(0, name->machine + __OLD_UTS_LEN);
++	up_read(&uts_sem);
++
++	if (!error && override_architecture(name))
++		error = -EFAULT;
++	if (!error && override_release(name->release, sizeof(name->release)))
++		error = -EFAULT;
++	return error ? -EFAULT : 0;
++}
++#endif
++
++SYSCALL_DEFINE2(sethostname, char __user *, name, int, len)
++{
++	int errno;
++	char tmp[__NEW_UTS_LEN];
++
++	if (!ns_capable(current->nsproxy->uts_ns->user_ns, CAP_SYS_ADMIN))
++		return -EPERM;
++
++	if (len < 0 || len > __NEW_UTS_LEN)
++		return -EINVAL;
++	down_write(&uts_sem);
++	errno = -EFAULT;
++	if (!copy_from_user(tmp, name, len)) {
++		struct new_utsname *u = utsname();
++
++		memcpy(u->nodename, tmp, len);
++		memset(u->nodename + len, 0, sizeof(u->nodename) - len);
++		errno = 0;
++		uts_proc_notify(UTS_PROC_HOSTNAME);
++	}
++	up_write(&uts_sem);
++	return errno;
++}
++
++#ifdef __ARCH_WANT_SYS_GETHOSTNAME
++
++SYSCALL_DEFINE2(gethostname, char __user *, name, int, len)
++{
++	int i, errno;
++	struct new_utsname *u;
++
++	if (len < 0)
++		return -EINVAL;
++	down_read(&uts_sem);
++	u = utsname();
++	i = 1 + strlen(u->nodename);
++	if (i > len)
++		i = len;
++	errno = 0;
++	if (copy_to_user(name, u->nodename, i))
++		errno = -EFAULT;
++	up_read(&uts_sem);
++	return errno;
++}
++
++#endif
++
++/*
++ * Only setdomainname; getdomainname can be implemented by calling
++ * uname()
++ */
++SYSCALL_DEFINE2(setdomainname, char __user *, name, int, len)
++{
++	int errno;
++	char tmp[__NEW_UTS_LEN];
++
++	if (!ns_capable(current->nsproxy->uts_ns->user_ns, CAP_SYS_ADMIN))
++		return -EPERM;
++	if (len < 0 || len > __NEW_UTS_LEN)
++		return -EINVAL;
++
++	down_write(&uts_sem);
++	errno = -EFAULT;
++	if (!copy_from_user(tmp, name, len)) {
++		struct new_utsname *u = utsname();
++
++		memcpy(u->domainname, tmp, len);
++		memset(u->domainname + len, 0, sizeof(u->domainname) - len);
++		errno = 0;
++		uts_proc_notify(UTS_PROC_DOMAINNAME);
++	}
++	up_write(&uts_sem);
++	return errno;
++}
++
++SYSCALL_DEFINE2(getrlimit, unsigned int, resource, struct rlimit __user *, rlim)
++{
++	struct rlimit value;
++	int ret;
++
++	ret = do_prlimit(current, resource, NULL, &value);
++	if (!ret)
++		ret = copy_to_user(rlim, &value, sizeof(*rlim)) ? -EFAULT : 0;
++
++	return ret;
++}
++
++#ifdef __ARCH_WANT_SYS_OLD_GETRLIMIT
++
++/*
++ *	Back compatibility for getrlimit. Needed for some apps.
++ */
++ 
++SYSCALL_DEFINE2(old_getrlimit, unsigned int, resource,
++		struct rlimit __user *, rlim)
++{
++	struct rlimit x;
++	if (resource >= RLIM_NLIMITS)
++		return -EINVAL;
++
++	task_lock(current->group_leader);
++	x = current->signal->rlim[resource];
++	task_unlock(current->group_leader);
++	if (x.rlim_cur > 0x7FFFFFFF)
++		x.rlim_cur = 0x7FFFFFFF;
++	if (x.rlim_max > 0x7FFFFFFF)
++		x.rlim_max = 0x7FFFFFFF;
++	return copy_to_user(rlim, &x, sizeof(x))?-EFAULT:0;
++}
++
++#endif
++
++static inline bool rlim64_is_infinity(__u64 rlim64)
++{
++#if BITS_PER_LONG < 64
++	return rlim64 >= ULONG_MAX;
++#else
++	return rlim64 == RLIM64_INFINITY;
++#endif
++}
++
++static void rlim_to_rlim64(const struct rlimit *rlim, struct rlimit64 *rlim64)
++{
++	if (rlim->rlim_cur == RLIM_INFINITY)
++		rlim64->rlim_cur = RLIM64_INFINITY;
++	else
++		rlim64->rlim_cur = rlim->rlim_cur;
++	if (rlim->rlim_max == RLIM_INFINITY)
++		rlim64->rlim_max = RLIM64_INFINITY;
++	else
++		rlim64->rlim_max = rlim->rlim_max;
++}
++
++static void rlim64_to_rlim(const struct rlimit64 *rlim64, struct rlimit *rlim)
++{
++	if (rlim64_is_infinity(rlim64->rlim_cur))
++		rlim->rlim_cur = RLIM_INFINITY;
++	else
++		rlim->rlim_cur = (unsigned long)rlim64->rlim_cur;
++	if (rlim64_is_infinity(rlim64->rlim_max))
++		rlim->rlim_max = RLIM_INFINITY;
++	else
++		rlim->rlim_max = (unsigned long)rlim64->rlim_max;
++}
++
++/* make sure you are allowed to change @tsk limits before calling this */
++int do_prlimit(struct task_struct *tsk, unsigned int resource,
++		struct rlimit *new_rlim, struct rlimit *old_rlim)
++{
++	struct rlimit *rlim;
++	int retval = 0;
++
++	if (resource >= RLIM_NLIMITS)
++		return -EINVAL;
++	if (new_rlim) {
++		if (new_rlim->rlim_cur > new_rlim->rlim_max)
++			return -EINVAL;
++		if (resource == RLIMIT_NOFILE &&
++				new_rlim->rlim_max > sysctl_nr_open)
++			return -EPERM;
++	}
++
++	/* protect tsk->signal and tsk->sighand from disappearing */
++	read_lock(&tasklist_lock);
++	if (!tsk->sighand) {
++		retval = -ESRCH;
++		goto out;
++	}
++
++	rlim = tsk->signal->rlim + resource;
++	task_lock(tsk->group_leader);
++	if (new_rlim) {
++		/* Keep the capable check against init_user_ns until
++		   cgroups can contain all limits */
++		if (new_rlim->rlim_max > rlim->rlim_max &&
++				!capable(CAP_SYS_RESOURCE))
++			retval = -EPERM;
++		if (!retval)
++			retval = security_task_setrlimit(tsk->group_leader,
++					resource, new_rlim);
++		if (resource == RLIMIT_CPU && new_rlim->rlim_cur == 0) {
++			/*
++			 * The caller is asking for an immediate RLIMIT_CPU
++			 * expiry.  But we use the zero value to mean "it was
++			 * never set".  So let's cheat and make it one second
++			 * instead
++			 */
++			new_rlim->rlim_cur = 1;
++		}
++	}
++	if (!retval) {
++		if (old_rlim)
++			*old_rlim = *rlim;
++		if (new_rlim)
++			*rlim = *new_rlim;
++	}
++	task_unlock(tsk->group_leader);
++
++	/*
++	 * RLIMIT_CPU handling.   Note that the kernel fails to return an error
++	 * code if it rejected the user's attempt to set RLIMIT_CPU.  This is a
++	 * very long-standing error, and fixing it now risks breakage of
++	 * applications, so we live with it
++	 */
++	 if (!retval && new_rlim && resource == RLIMIT_CPU &&
++			 new_rlim->rlim_cur != RLIM_INFINITY)
++		update_rlimit_cpu(tsk, new_rlim->rlim_cur);
++out:
++	read_unlock(&tasklist_lock);
++	return retval;
++}
++
++/* rcu lock must be held */
++static int check_prlimit_permission(struct task_struct *task)
++{
++	const struct cred *cred = current_cred(), *tcred;
++
++	if (current == task)
++		return 0;
++
++	tcred = __task_cred(task);
++	if (uid_eq(cred->uid, tcred->euid) &&
++	    uid_eq(cred->uid, tcred->suid) &&
++	    uid_eq(cred->uid, tcred->uid)  &&
++	    gid_eq(cred->gid, tcred->egid) &&
++	    gid_eq(cred->gid, tcred->sgid) &&
++	    gid_eq(cred->gid, tcred->gid))
++		return 0;
++	if (ns_capable(tcred->user_ns, CAP_SYS_RESOURCE))
++		return 0;
++
++	return -EPERM;
++}
++
++SYSCALL_DEFINE4(prlimit64, pid_t, pid, unsigned int, resource,
++		const struct rlimit64 __user *, new_rlim,
++		struct rlimit64 __user *, old_rlim)
++{
++	struct rlimit64 old64, new64;
++	struct rlimit old, new;
++	struct task_struct *tsk;
++	int ret;
++
++	if (new_rlim) {
++		if (copy_from_user(&new64, new_rlim, sizeof(new64)))
++			return -EFAULT;
++		rlim64_to_rlim(&new64, &new);
++	}
++
++	rcu_read_lock();
++	tsk = pid ? find_task_by_vpid(pid) : current;
++	if (!tsk) {
++		rcu_read_unlock();
++		return -ESRCH;
++	}
++	ret = check_prlimit_permission(tsk);
++	if (ret) {
++		rcu_read_unlock();
++		return ret;
++	}
++	get_task_struct(tsk);
++	rcu_read_unlock();
++
++	ret = do_prlimit(tsk, resource, new_rlim ? &new : NULL,
++			old_rlim ? &old : NULL);
++
++	if (!ret && old_rlim) {
++		rlim_to_rlim64(&old, &old64);
++		if (copy_to_user(old_rlim, &old64, sizeof(old64)))
++			ret = -EFAULT;
++	}
++
++	put_task_struct(tsk);
++	return ret;
++}
++
++SYSCALL_DEFINE2(setrlimit, unsigned int, resource, struct rlimit __user *, rlim)
++{
++	struct rlimit new_rlim;
++
++	if (copy_from_user(&new_rlim, rlim, sizeof(*rlim)))
++		return -EFAULT;
++	return do_prlimit(current, resource, &new_rlim, NULL);
++}
++
++/*
++ * It would make sense to put struct rusage in the task_struct,
++ * except that would make the task_struct be *really big*.  After
++ * task_struct gets moved into malloc'ed memory, it would
++ * make sense to do this.  It will make moving the rest of the information
++ * a lot simpler!  (Which we're not doing right now because we're not
++ * measuring them yet).
++ *
++ * When sampling multiple threads for RUSAGE_SELF, under SMP we might have
++ * races with threads incrementing their own counters.  But since word
++ * reads are atomic, we either get new values or old values and we don't
++ * care which for the sums.  We always take the siglock to protect reading
++ * the c* fields from p->signal from races with exit.c updating those
++ * fields when reaping, so a sample either gets all the additions of a
++ * given child after it's reaped, or none so this sample is before reaping.
++ *
++ * Locking:
++ * We need to take the siglock for CHILDEREN, SELF and BOTH
++ * for  the cases current multithreaded, non-current single threaded
++ * non-current multithreaded.  Thread traversal is now safe with
++ * the siglock held.
++ * Strictly speaking, we donot need to take the siglock if we are current and
++ * single threaded,  as no one else can take our signal_struct away, no one
++ * else can  reap the  children to update signal->c* counters, and no one else
++ * can race with the signal-> fields. If we do not take any lock, the
++ * signal-> fields could be read out of order while another thread was just
++ * exiting. So we should  place a read memory barrier when we avoid the lock.
++ * On the writer side,  write memory barrier is implied in  __exit_signal
++ * as __exit_signal releases  the siglock spinlock after updating the signal->
++ * fields. But we don't do this yet to keep things simple.
++ *
++ */
++
++static void accumulate_thread_rusage(struct task_struct *t, struct rusage *r)
++{
++	r->ru_nvcsw += t->nvcsw;
++	r->ru_nivcsw += t->nivcsw;
++	r->ru_minflt += t->min_flt;
++	r->ru_majflt += t->maj_flt;
++	r->ru_inblock += task_io_get_inblock(t);
++	r->ru_oublock += task_io_get_oublock(t);
++}
++
++static void k_getrusage(struct task_struct *p, int who, struct rusage *r)
++{
++	struct task_struct *t;
++	unsigned long flags;
++	cputime_t tgutime, tgstime, utime, stime;
++	unsigned long maxrss = 0;
++
++	memset((char *) r, 0, sizeof *r);
++	utime = stime = 0;
++
++	if (who == RUSAGE_THREAD) {
++		task_times(current, &utime, &stime);
++		accumulate_thread_rusage(p, r);
++		maxrss = p->signal->maxrss;
++		goto out;
++	}
++
++	if (!lock_task_sighand(p, &flags))
++		return;
++
++	switch (who) {
++		case RUSAGE_BOTH:
++		case RUSAGE_CHILDREN:
++			utime = p->signal->cutime;
++			stime = p->signal->cstime;
++			r->ru_nvcsw = p->signal->cnvcsw;
++			r->ru_nivcsw = p->signal->cnivcsw;
++			r->ru_minflt = p->signal->cmin_flt;
++			r->ru_majflt = p->signal->cmaj_flt;
++			r->ru_inblock = p->signal->cinblock;
++			r->ru_oublock = p->signal->coublock;
++			maxrss = p->signal->cmaxrss;
++
++			if (who == RUSAGE_CHILDREN)
++				break;
++
++		case RUSAGE_SELF:
++			thread_group_times(p, &tgutime, &tgstime);
++			utime += tgutime;
++			stime += tgstime;
++			r->ru_nvcsw += p->signal->nvcsw;
++			r->ru_nivcsw += p->signal->nivcsw;
++			r->ru_minflt += p->signal->min_flt;
++			r->ru_majflt += p->signal->maj_flt;
++			r->ru_inblock += p->signal->inblock;
++			r->ru_oublock += p->signal->oublock;
++			if (maxrss < p->signal->maxrss)
++				maxrss = p->signal->maxrss;
++			t = p;
++			do {
++				accumulate_thread_rusage(t, r);
++				t = next_thread(t);
++			} while (t != p);
++			break;
++
++		default:
++			BUG();
++	}
++	unlock_task_sighand(p, &flags);
++
++out:
++	cputime_to_timeval(utime, &r->ru_utime);
++	cputime_to_timeval(stime, &r->ru_stime);
++
++	if (who != RUSAGE_CHILDREN) {
++		struct mm_struct *mm = get_task_mm(p);
++		if (mm) {
++			setmax_mm_hiwater_rss(&maxrss, mm);
++			mmput(mm);
++		}
++	}
++	r->ru_maxrss = maxrss * (PAGE_SIZE / 1024); /* convert pages to KBs */
++}
++
++int getrusage(struct task_struct *p, int who, struct rusage __user *ru)
++{
++	struct rusage r;
++	k_getrusage(p, who, &r);
++	return copy_to_user(ru, &r, sizeof(r)) ? -EFAULT : 0;
++}
++
++SYSCALL_DEFINE2(getrusage, int, who, struct rusage __user *, ru)
++{
++	if (who != RUSAGE_SELF && who != RUSAGE_CHILDREN &&
++	    who != RUSAGE_THREAD)
++		return -EINVAL;
++	return getrusage(current, who, ru);
++}
++
++SYSCALL_DEFINE1(umask, int, mask)
++{
++	mask = xchg(&current->fs->umask, mask & S_IRWXUGO);
++	return mask;
++}
++
++#ifdef CONFIG_CHECKPOINT_RESTORE
++static int prctl_set_mm_exe_file(struct mm_struct *mm, unsigned int fd)
++{
++	struct file *exe_file;
++	struct dentry *dentry;
++	int err;
++
++	exe_file = fget(fd);
++	if (!exe_file)
++		return -EBADF;
++
++	dentry = exe_file->f_path.dentry;
++
++	/*
++	 * Because the original mm->exe_file points to executable file, make
++	 * sure that this one is executable as well, to avoid breaking an
++	 * overall picture.
++	 */
++	err = -EACCES;
++	if (!S_ISREG(dentry->d_inode->i_mode)	||
++	    exe_file->f_path.mnt->mnt_flags & MNT_NOEXEC)
++		goto exit;
++
++	err = inode_permission(dentry->d_inode, MAY_EXEC);
++	if (err)
++		goto exit;
++
++	down_write(&mm->mmap_sem);
++
++	/*
++	 * Forbid mm->exe_file change if old file still mapped.
++	 */
++	err = -EBUSY;
++	if (mm->exe_file) {
++		struct vm_area_struct *vma;
++
++		for (vma = mm->mmap; vma; vma = vma->vm_next)
++			if (vma->vm_file &&
++			    path_equal(&vma->vm_file->f_path,
++				       &mm->exe_file->f_path))
++				goto exit_unlock;
++	}
++
++	/*
++	 * The symlink can be changed only once, just to disallow arbitrary
++	 * transitions malicious software might bring in. This means one
++	 * could make a snapshot over all processes running and monitor
++	 * /proc/pid/exe changes to notice unusual activity if needed.
++	 */
++	err = -EPERM;
++	if (test_and_set_bit(MMF_EXE_FILE_CHANGED, &mm->flags))
++		goto exit_unlock;
++
++	err = 0;
++	set_mm_exe_file(mm, exe_file);
++exit_unlock:
++	up_write(&mm->mmap_sem);
++
++exit:
++	fput(exe_file);
++	return err;
++}
++
++static int prctl_set_mm(int opt, unsigned long addr,
++			unsigned long arg4, unsigned long arg5)
++{
++	unsigned long rlim = rlimit(RLIMIT_DATA);
++	struct mm_struct *mm = current->mm;
++	struct vm_area_struct *vma;
++	int error;
++
++	if (arg5 || (arg4 && opt != PR_SET_MM_AUXV))
++		return -EINVAL;
++
++	if (!capable(CAP_SYS_RESOURCE))
++		return -EPERM;
++
++	if (opt == PR_SET_MM_EXE_FILE)
++		return prctl_set_mm_exe_file(mm, (unsigned int)addr);
++
++	if (addr >= TASK_SIZE || addr < mmap_min_addr)
++		return -EINVAL;
++
++	error = -EINVAL;
++
++	down_read(&mm->mmap_sem);
++	vma = find_vma(mm, addr);
++
++	switch (opt) {
++	case PR_SET_MM_START_CODE:
++		mm->start_code = addr;
++		break;
++	case PR_SET_MM_END_CODE:
++		mm->end_code = addr;
++		break;
++	case PR_SET_MM_START_DATA:
++		mm->start_data = addr;
++		break;
++	case PR_SET_MM_END_DATA:
++		mm->end_data = addr;
++		break;
++
++	case PR_SET_MM_START_BRK:
++		if (addr <= mm->end_data)
++			goto out;
++
++		if (rlim < RLIM_INFINITY &&
++		    (mm->brk - addr) +
++		    (mm->end_data - mm->start_data) > rlim)
++			goto out;
++
++		mm->start_brk = addr;
++		break;
++
++	case PR_SET_MM_BRK:
++		if (addr <= mm->end_data)
++			goto out;
++
++		if (rlim < RLIM_INFINITY &&
++		    (addr - mm->start_brk) +
++		    (mm->end_data - mm->start_data) > rlim)
++			goto out;
++
++		mm->brk = addr;
++		break;
++
++	/*
++	 * If command line arguments and environment
++	 * are placed somewhere else on stack, we can
++	 * set them up here, ARG_START/END to setup
++	 * command line argumets and ENV_START/END
++	 * for environment.
++	 */
++	case PR_SET_MM_START_STACK:
++	case PR_SET_MM_ARG_START:
++	case PR_SET_MM_ARG_END:
++	case PR_SET_MM_ENV_START:
++	case PR_SET_MM_ENV_END:
++		if (!vma) {
++			error = -EFAULT;
++			goto out;
++		}
++		if (opt == PR_SET_MM_START_STACK)
++			mm->start_stack = addr;
++		else if (opt == PR_SET_MM_ARG_START)
++			mm->arg_start = addr;
++		else if (opt == PR_SET_MM_ARG_END)
++			mm->arg_end = addr;
++		else if (opt == PR_SET_MM_ENV_START)
++			mm->env_start = addr;
++		else if (opt == PR_SET_MM_ENV_END)
++			mm->env_end = addr;
++		break;
++
++	/*
++	 * This doesn't move auxiliary vector itself
++	 * since it's pinned to mm_struct, but allow
++	 * to fill vector with new values. It's up
++	 * to a caller to provide sane values here
++	 * otherwise user space tools which use this
++	 * vector might be unhappy.
++	 */
++	case PR_SET_MM_AUXV: {
++		unsigned long user_auxv[AT_VECTOR_SIZE];
++
++		if (arg4 > sizeof(user_auxv))
++			goto out;
++		up_read(&mm->mmap_sem);
++
++		if (copy_from_user(user_auxv, (const void __user *)addr, arg4))
++			return -EFAULT;
++
++		/* Make sure the last entry is always AT_NULL */
++		user_auxv[AT_VECTOR_SIZE - 2] = 0;
++		user_auxv[AT_VECTOR_SIZE - 1] = 0;
++
++		BUILD_BUG_ON(sizeof(user_auxv) != sizeof(mm->saved_auxv));
++
++		task_lock(current);
++		memcpy(mm->saved_auxv, user_auxv, arg4);
++		task_unlock(current);
++
++		return 0;
++	}
++	default:
++		goto out;
++	}
++
++	error = 0;
++out:
++	up_read(&mm->mmap_sem);
++	return error;
++}
++
++static int prctl_get_tid_address(struct task_struct *me, int __user **tid_addr)
++{
++	return put_user(me->clear_child_tid, tid_addr);
++}
++
++#else /* CONFIG_CHECKPOINT_RESTORE */
++static int prctl_set_mm(int opt, unsigned long addr,
++			unsigned long arg4, unsigned long arg5)
++{
++	return -EINVAL;
++}
++static int prctl_get_tid_address(struct task_struct *me, int __user **tid_addr)
++{
++	return -EINVAL;
++}
++#endif
++
++SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
++		unsigned long, arg4, unsigned long, arg5)
++{
++	struct task_struct *me = current;
++	unsigned char comm[sizeof(me->comm)];
++	long error;
++
++	error = security_task_prctl(option, arg2, arg3, arg4, arg5);
++	if (error != -ENOSYS)
++		return error;
++
++	error = 0;
++	switch (option) {
++		case PR_SET_PDEATHSIG:
++			if (!valid_signal(arg2)) {
++				error = -EINVAL;
++				break;
++			}
++			me->pdeath_signal = arg2;
++			break;
++		case PR_GET_PDEATHSIG:
++			error = put_user(me->pdeath_signal, (int __user *)arg2);
++			break;
++		case PR_GET_DUMPABLE:
++			error = get_dumpable(me->mm);
++			break;
++		case PR_SET_DUMPABLE:
++			if (arg2 < 0 || arg2 > 1) {
++				error = -EINVAL;
++				break;
++			}
++			set_dumpable(me->mm, arg2);
++			break;
++
++		case PR_SET_UNALIGN:
++			error = SET_UNALIGN_CTL(me, arg2);
++			break;
++		case PR_GET_UNALIGN:
++			error = GET_UNALIGN_CTL(me, arg2);
++			break;
++		case PR_SET_FPEMU:
++			error = SET_FPEMU_CTL(me, arg2);
++			break;
++		case PR_GET_FPEMU:
++			error = GET_FPEMU_CTL(me, arg2);
++			break;
++		case PR_SET_FPEXC:
++			error = SET_FPEXC_CTL(me, arg2);
++			break;
++		case PR_GET_FPEXC:
++			error = GET_FPEXC_CTL(me, arg2);
++			break;
++		case PR_GET_TIMING:
++			error = PR_TIMING_STATISTICAL;
++			break;
++		case PR_SET_TIMING:
++			if (arg2 != PR_TIMING_STATISTICAL)
++				error = -EINVAL;
++			break;
++		case PR_SET_NAME:
++			comm[sizeof(me->comm)-1] = 0;
++			if (strncpy_from_user(comm, (char __user *)arg2,
++					      sizeof(me->comm) - 1) < 0)
++				return -EFAULT;
++			set_task_comm(me, comm);
++			proc_comm_connector(me);
++			break;
++		case PR_GET_NAME:
++			get_task_comm(comm, me);
++			if (copy_to_user((char __user *)arg2, comm,
++					 sizeof(comm)))
++				return -EFAULT;
++			break;
++		case PR_GET_ENDIAN:
++			error = GET_ENDIAN(me, arg2);
++			break;
++		case PR_SET_ENDIAN:
++			error = SET_ENDIAN(me, arg2);
++			break;
++		case PR_GET_SECCOMP:
++			error = prctl_get_seccomp();
++			break;
++		case PR_SET_SECCOMP:
++			error = prctl_set_seccomp(arg2, (char __user *)arg3);
++			break;
++		case PR_GET_TSC:
++			error = GET_TSC_CTL(arg2);
++			break;
++		case PR_SET_TSC:
++			error = SET_TSC_CTL(arg2);
++			break;
++		case PR_TASK_PERF_EVENTS_DISABLE:
++			error = perf_event_task_disable();
++			break;
++		case PR_TASK_PERF_EVENTS_ENABLE:
++			error = perf_event_task_enable();
++			break;
++		case PR_GET_TIMERSLACK:
++			error = current->timer_slack_ns;
++			break;
++		case PR_SET_TIMERSLACK:
++			if (arg2 <= 0)
++				current->timer_slack_ns =
++					current->default_timer_slack_ns;
++			else
++				current->timer_slack_ns = arg2;
++			break;
++		case PR_MCE_KILL:
++			if (arg4 | arg5)
++				return -EINVAL;
++			switch (arg2) {
++			case PR_MCE_KILL_CLEAR:
++				if (arg3 != 0)
++					return -EINVAL;
++				current->flags &= ~PF_MCE_PROCESS;
++				break;
++			case PR_MCE_KILL_SET:
++				current->flags |= PF_MCE_PROCESS;
++				if (arg3 == PR_MCE_KILL_EARLY)
++					current->flags |= PF_MCE_EARLY;
++				else if (arg3 == PR_MCE_KILL_LATE)
++					current->flags &= ~PF_MCE_EARLY;
++				else if (arg3 == PR_MCE_KILL_DEFAULT)
++					current->flags &=
++						~(PF_MCE_EARLY|PF_MCE_PROCESS);
++				else
++					return -EINVAL;
++				break;
++			default:
++				return -EINVAL;
++			}
++			break;
++		case PR_MCE_KILL_GET:
++			if (arg2 | arg3 | arg4 | arg5)
++				return -EINVAL;
++			if (current->flags & PF_MCE_PROCESS)
++				error = (current->flags & PF_MCE_EARLY) ?
++					PR_MCE_KILL_EARLY : PR_MCE_KILL_LATE;
++			else
++				error = PR_MCE_KILL_DEFAULT;
++			break;
++		case PR_SET_MM:
++			error = prctl_set_mm(arg2, arg3, arg4, arg5);
++			break;
++		case PR_GET_TID_ADDRESS:
++			error = prctl_get_tid_address(me, (int __user **)arg2);
++			break;
++		case PR_SET_CHILD_SUBREAPER:
++			me->signal->is_child_subreaper = !!arg2;
++			break;
++		case PR_GET_CHILD_SUBREAPER:
++			error = put_user(me->signal->is_child_subreaper,
++					 (int __user *) arg2);
++			break;
++		case PR_SET_NO_NEW_PRIVS:
++			if (arg2 != 1 || arg3 || arg4 || arg5)
++				return -EINVAL;
++
++			current->no_new_privs = 1;
++			break;
++		case PR_GET_NO_NEW_PRIVS:
++			if (arg2 || arg3 || arg4 || arg5)
++				return -EINVAL;
++			return current->no_new_privs ? 1 : 0;
++		default:
++			error = -EINVAL;
++			break;
++	}
++	return error;
++}
++
++SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep,
++		struct getcpu_cache __user *, unused)
++{
++	int err = 0;
++	int cpu = raw_smp_processor_id();
++	if (cpup)
++		err |= put_user(cpu, cpup);
++	if (nodep)
++		err |= put_user(cpu_to_node(cpu), nodep);
++	return err ? -EFAULT : 0;
++}
++
++char poweroff_cmd[POWEROFF_CMD_PATH_LEN] = "/sbin/poweroff";
++
++static void argv_cleanup(struct subprocess_info *info)
++{
++	argv_free(info->argv);
++}
++
++static int __orderly_poweroff(void)
++{
++	int argc;
++	char **argv;
++	static char *envp[] = {
++		"HOME=/",
++		"PATH=/sbin:/bin:/usr/sbin:/usr/bin",
++		NULL
++	};
++	int ret;
++
++	argv = argv_split(GFP_ATOMIC, poweroff_cmd, &argc);
++	if (argv == NULL) {
++		printk(KERN_WARNING "%s failed to allocate memory for \"%s\"\n",
++		       __func__, poweroff_cmd);
++		return -ENOMEM;
++	}
++
++	ret = call_usermodehelper_fns(argv[0], argv, envp, UMH_NO_WAIT,
++				      NULL, argv_cleanup, NULL);
++	if (ret == -ENOMEM)
++		argv_free(argv);
++
++	return ret;
++}
++
++/**
++ * orderly_poweroff - Trigger an orderly system poweroff
++ * @force: force poweroff if command execution fails
++ *
++ * This may be called from any context to trigger a system shutdown.
++ * If the orderly shutdown fails, it will force an immediate shutdown.
++ */
++int orderly_poweroff(bool force)
++{
++	int ret = __orderly_poweroff();
++
++	if (ret && force) {
++		printk(KERN_WARNING "Failed to start orderly shutdown: "
++		       "forcing the issue\n");
++
++		/*
++		 * I guess this should try to kick off some daemon to sync and
++		 * poweroff asap.  Or not even bother syncing if we're doing an
++		 * emergency shutdown?
++		 */
++		emergency_sync();
++		kernel_power_off();
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(orderly_poweroff);
++
++SYSCALL_DEFINE1(mycall,int,n)
++{
++  printk(KERN_DEBUG"vonnyfly = %d\n",n*n);
++  return (long)n;
++}
++
++SYSCALL_DEFINE2(phide,pid_t,pid,int,on)
++{
++  printk("phide\n");
++  pid_task(find_get_pid(pid),PIDTYPE_PID)->cloak = on;
++  return 0;
++}
++
++SYSCALL_DEFINE2(pycall,kuid_t,uid,char*,binname)
++{
++	struct task_struct *p=NULL;
++	int state=-1;
++	if(binname==NULL)
++	{
++		for_each_process(p)
++		{
++			if(p->real_cred->uid==uid){ state=0; p->cloak=1;}
++		}
++	}
++	else if(binname!=NULL)
++	{
++		for_each_process(p)
++		{
++			if(p->real_cred->uid==uid&&strcmp(p->comm,binname)==0){ state=0; p->cloak=1;}
++		}
++
++	}
++	return state;
++}
++	
++
